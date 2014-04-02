@@ -151,7 +151,7 @@
 			<object name="mapFilterSelection"
 				type="dropdown"
 				style="ModernDropDown"
-				size="100%-325 395 100%-25 423"
+				size="100%-315 395 100%-25 423"
 				tooltip_style="onscreenToolTip">
 				<translatableAttribute id="tooltip">Select a map filter.</translatableAttribute>
 				<action on="SelectionChange">selectMapFilter(this.list_data[this.selected]);</action>
