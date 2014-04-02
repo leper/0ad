@@ -78,7 +78,7 @@ function translatePluralWithContext(context, singularMessage, pluralMessage, num
 // Translates any string value in the specified JavaScript object that is associated with a key included in
 // the specified keys array.
 function translateObjectKeys(object, keys) {
-	for (property in object)
+	for (var property in object)
 	{
 		if (keys.indexOf(property) > -1)
 		{
