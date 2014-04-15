@@ -327,7 +327,7 @@
 					</object>
 					<object size="0 30 40% 58">
 						<object size="0 0 100% 100%" type="text" style="ModernRightLabelText">
-							<tranlatableAttribute id="caption">Explore Map:</translatableAttribute>
+							<translatableAttribute id="caption">Explore Map:</translatableAttribute>
 						</object>
 					</object>
 					<object size="0 60 40% 88">
