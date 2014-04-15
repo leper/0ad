@@ -54,6 +54,9 @@ def main():
                     os.chdir(path)
                     project = Project(path)
                     project.pull(fetchall=True, force=True)
+                    # Use this to pull only the main languages (those that will most likely be included in A16)
+                    #project.pull(languages=['en', 'ge', 'it', 'pt_PT', 'nl', 'es', 'fr'])
+
 
 
 if __name__ == "__main__":
