@@ -29,7 +29,7 @@ function translatePlural(singularMessage, pluralMessage, number)
 
 	var pluralTranslation = g_pluralTranslations[singularMessage][number];
 	if (!pluralTranslation)
-		return g_pluralTranslations[singularMessage][number] = Engine.translateWithContext(singularMessage, pluralMessage, number);
+		return g_pluralTranslations[singularMessage][number] = Engine.translatePlural(singularMessage, pluralMessage, number);
 
 	return pluralTranslation;
 }
@@ -56,7 +56,7 @@ function translateWithContext(context, message)
 // Translates the specified English message into the current language for the specified context and number.
 //
 // This function relies on the g_pluralTranslationsWithContext cache when possible. You should use this function instead of
-// Engine.translateWithContext() whenever you can to minimize the number of C++ calls and string conversions involved.
+// Engine.translatePluralWithContext() whenever you can to minimize the number of C++ calls and string conversions involved.
 function translatePluralWithContext(context, singularMessage, pluralMessage, number)
 {
 	var translationContext = g_pluralTranslationsWithContext[context];
@@ -69,7 +69,7 @@ function translatePluralWithContext(context, singularMessage, pluralMessage, num
 
 	var pluralTranslationWithContext = g_pluralTranslationsWithContext[context][singularMessage][number];
 	if (!pluralTranslationWithContext)
-		return g_pluralTranslationsWithContext[context][singularMessage][number] = Engine.translateWithContext(context, singularMessage, pluralMessage, number);
+		return g_pluralTranslationsWithContext[context][singularMessage][number] = Engine.translatePluralWithContext(context, singularMessage, pluralMessage, number);
 
 	return pluralTranslationWithContext;
 }
