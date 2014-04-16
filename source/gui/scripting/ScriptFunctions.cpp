@@ -1,4 +1,4 @@
-/* Copyright (C) 2013 Wildfire Games.
+/* Copyright (C) 2014 Wildfire Games.
  * This file is part of 0 A.D.
  *
  * 0 A.D. is free software: you can redistribute it and/or modify
@@ -28,6 +28,7 @@
 #include "gui/scripting/JSInterface_GUITypes.h"
 #include "graphics/scripting/JSInterface_GameView.h"
 #include "i18n/L10n.h"
+#include "i18n/scripting/JSInterface_L10n.h"
 #include "lib/svn_revision.h"
 #include "lib/sysdep/sysdep.h"
 #include "lib/timer.h"
@@ -55,7 +56,6 @@
 #include "ps/UserReport.h"
 #include "ps/GameSetup/Atlas.h"
 #include "ps/GameSetup/Config.h"
-#include "ps/ConfigDB.h"
 #include "renderer/scripting/JSInterface_Renderer.h"
 #include "tools/atlas/GameInterface/GameLoop.h"
 
@@ -702,31 +702,31 @@ std::wstring GetBuildTimestamp(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), i
 	char buf[200];
 	if (mode == -1) // Date, time and revision.
 	{
-		UDate dateTime = L10n::instance().parseDateTime(__DATE__ " " __TIME__, "MMM d yyyy HH:mm:ss", Locale::getUS());
-		std::string dateTimeString = L10n::instance().localizeDateTime(dateTime, L10n::DateTime, SimpleDateFormat::DATE_TIME);
+		UDate dateTime = L10n::Instance().ParseDateTime(__DATE__ " " __TIME__, "MMM d yyyy HH:mm:ss", Locale::getUS());
+		std::string dateTimeString = L10n::Instance().LocalizeDateTime(dateTime, L10n::DateTime, SimpleDateFormat::DATE_TIME);
 		char svnRevision[32];
 		sprintf_s(svnRevision, ARRAY_SIZE(svnRevision), "%ls", svn_revision);
 		if (strcmp(svnRevision, "custom build") == 0)
 		{
 			// Translation: First item is a date and time, item between parenthesis is the Subversion revision number of the current build.
-			sprintf_s(buf, ARRAY_SIZE(buf), L10n::instance().translate("%s (custom build)").c_str(), dateTimeString.c_str());
+			sprintf_s(buf, ARRAY_SIZE(buf), L10n::Instance().Translate("%s (custom build)").c_str(), dateTimeString.c_str());
 		}
 		else
 		{
 			// Translation: First item is a date and time, item between parenthesis is the Subversion revision number of the current build.
-			sprintf_s(buf, ARRAY_SIZE(buf), L10n::instance().translate("%s (%ls)").c_str(), dateTimeString.c_str(), svn_revision);
+			sprintf_s(buf, ARRAY_SIZE(buf), L10n::Instance().Translate("%s (%ls)").c_str(), dateTimeString.c_str(), svn_revision);
 		}
 	}
 	else if (mode == 0) // Date.
 	{
-		UDate dateTime = L10n::instance().parseDateTime(__DATE__, "MMM d yyyy", Locale::getUS());
-		std::string dateTimeString = L10n::instance().localizeDateTime(dateTime, L10n::Date, SimpleDateFormat::MEDIUM);
+		UDate dateTime = L10n::Instance().ParseDateTime(__DATE__, "MMM d yyyy", Locale::getUS());
+		std::string dateTimeString = L10n::Instance().LocalizeDateTime(dateTime, L10n::Date, SimpleDateFormat::MEDIUM);
 		sprintf_s(buf, ARRAY_SIZE(buf), "%s", dateTimeString.c_str());
 	}
 	else if (mode == 1) // Time.
 	{
-		UDate dateTime = L10n::instance().parseDateTime(__TIME__, "HH:mm:ss", Locale::getUS());
-		std::string dateTimeString = L10n::instance().localizeDateTime(dateTime, L10n::Time, SimpleDateFormat::MEDIUM);
+		UDate dateTime = L10n::Instance().ParseDateTime(__TIME__, "HH:mm:ss", Locale::getUS());
+		std::string dateTimeString = L10n::Instance().LocalizeDateTime(dateTime, L10n::Time, SimpleDateFormat::MEDIUM);
 		sprintf_s(buf, ARRAY_SIZE(buf), "%s", dateTimeString.c_str());
 	}
 	else if (mode == 2) // Revision.
@@ -735,7 +735,7 @@ std::wstring GetBuildTimestamp(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), i
 		sprintf_s(svnRevision, ARRAY_SIZE(svnRevision), "%ls", svn_revision);
 		if (strcmp(svnRevision, "custom build") == 0)
 		{
-			sprintf_s(buf, ARRAY_SIZE(buf), L10n::instance().translate("custom build").c_str());
+			sprintf_s(buf, ARRAY_SIZE(buf), L10n::Instance().Translate("custom build").c_str());
 		}
 		else
 		{
@@ -799,7 +799,6 @@ void StartJsTimer(ScriptInterface::CxPrivate* pCxPrivate, unsigned int slot)
 	js_start_times[slot].SetFromTimer();
 }
 
-
 void StopJsTimer(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), unsigned int slot)
 {
 	if (slot >= MAX_JS_TIMERS)
@@ -811,99 +810,6 @@ void StopJsTimer(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), unsigned int sl
 	BillingPolicy_Default()(&js_timer_clients[slot], js_start_times[slot], now);
 	js_start_times[slot].SetToZero();
 }
-
-
-// Return the current locale code.
-std::string getCurrentLocale(ScriptInterface::CxPrivate* UNUSED(pCxPrivate))
-{
-	return L10n::instance().getCurrentLocale().getLanguage();
-}
-
-// Returns a translation of the specified English string into the current language.
-std::wstring translate(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::wstring sourceString)
-{
-	return wstring_from_utf8(L10n::instance().translate(utf8_from_wstring(sourceString)));
-}
-
-// Returns a translation of the specified English string, for the specified context.
-std::wstring translateWithContext(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string context, std::wstring sourceString)
-{
-	return wstring_from_utf8(L10n::instance().translateWithContext(context, utf8_from_wstring(sourceString)));
-}
-
-// Return a translated version of the given strings (singular and plural) depending on an integer value.
-std::wstring translatePlural(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::wstring singularSourceString, std::wstring pluralSourceString, int number)
-{
-	return wstring_from_utf8(L10n::instance().translatePlural(utf8_from_wstring(singularSourceString), utf8_from_wstring(pluralSourceString), number));
-}
-
-// Return a translated version of the given strings (singular and plural) depending on an integer value, for the specified context.
-std::wstring translatePluralWithContext(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string context, std::wstring singularSourceString, std::wstring pluralSourceString, int number)
-{
-	return wstring_from_utf8(L10n::instance().translatePluralWithContext(context, utf8_from_wstring(singularSourceString), utf8_from_wstring(pluralSourceString), number));
-}
-
-// Return a translated version of the given string, localizing it line by line.
-std::wstring translateLines(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::wstring sourceString)
-{
-	return wstring_from_utf8(L10n::instance().translateLines(utf8_from_wstring(sourceString)));
-}
-
-// Return a translated version of the items in the specified array.
-std::vector<std::wstring> translateArray(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::vector<std::wstring> sourceArray)
-{
-	std::vector<std::wstring> translatedArray;
-	for (std::vector<std::wstring>::iterator iterator = sourceArray.begin(); iterator != sourceArray.end(); ++iterator)
-	{
-		translatedArray.push_back(wstring_from_utf8(L10n::instance().translate(utf8_from_wstring(*iterator))));
-	}
-	return translatedArray;
-}
-
-// Return a localized version of a time given in milliseconds.
-std::wstring formatMillisecondsIntoDateString(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), int milliseconds, std::wstring formatString)
-{
-	return wstring_from_utf8(L10n::instance().formatMillisecondsIntoDateString(milliseconds, utf8_from_wstring(formatString)));
-}
-
-// Return a localized version of the given decimal number.
-std::wstring formatDecimalNumberIntoString(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), double number)
-{
-	return wstring_from_utf8(L10n::instance().formatDecimalNumberIntoString(number));
-}
-
-// Return a translated version of the given decimal number.
-std::wstring markToTranslate(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::wstring sourceString)
-{
-	return sourceString;
-}
-
-std::vector<std::string> GetSupportedLocaleCodes(ScriptInterface::CxPrivate* UNUSED(pCxPrivate))
-{
-	return L10n::instance().getSupportedLocaleCodes();
-}
-
-std::vector<std::wstring> GetSupportedLocaleDisplayNames(ScriptInterface::CxPrivate* UNUSED(pCxPrivate))
-{
-	return L10n::instance().getSupportedLocaleDisplayNames();
-}
-
-int GetCurrentLocaleIndex(ScriptInterface::CxPrivate* UNUSED(pCxPrivate))
-{
-	return L10n::instance().getCurrentLocaleIndex();
-}
-
-void SetLocale(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string locale)
-{
-	// TODO: Use the ConfigDB functions exposed to js to change the config value
-	// Save the new locale in the settings file.
-	g_ConfigDB.SetValueString(CFG_USER, "locale", locale);
-	g_ConfigDB.WriteFile(CFG_USER);
-
-	// Reload the localization singleton to use the selected locale.
-	L10n::instance().setCurrentLocale(locale);
-}
-
 } // namespace
 
 
@@ -912,12 +818,13 @@ void GuiScriptingInit(ScriptInterface& scriptInterface)
 {
 	JSI_IGUIObject::init(scriptInterface);
 	JSI_GUITypes::init(scriptInterface);
-	
+
 	JSI_GameView::RegisterScriptFunctions(scriptInterface);
 	JSI_Renderer::RegisterScriptFunctions(scriptInterface);
 	JSI_Console::RegisterScriptFunctions(scriptInterface);
 	JSI_ConfigDB::RegisterScriptFunctions(scriptInterface);
 	JSI_Sound::RegisterScriptFunctions(scriptInterface);
+	JSI_L10n::RegisterScriptFunctions(scriptInterface);
  
 	// VFS (external)
 	scriptInterface.RegisterFunction<CScriptVal, std::wstring, std::wstring, bool, &JSI_VFS::BuildDirEntList>("BuildDirEntList");
@@ -992,6 +899,7 @@ void GuiScriptingInit(ScriptInterface& scriptInterface)
 	scriptInterface.RegisterFunction<bool, &IsPaused>("IsPaused");
 	scriptInterface.RegisterFunction<void, bool, &SetPaused>("SetPaused");
 	scriptInterface.RegisterFunction<int, &GetFps>("GetFPS");
+	scriptInterface.RegisterFunction<std::wstring, int, &GetBuildTimestamp>("GetBuildTimestamp");
 
 	// User report functions
 	scriptInterface.RegisterFunction<bool, &IsUserReportEnabled>("IsUserReportEnabled");
@@ -1048,21 +956,4 @@ void GuiScriptingInit(ScriptInterface& scriptInterface)
 	scriptInterface.RegisterFunction<void, bool, &JSI_Lobby::SetRankedGame>("SetRankedGame");
 	scriptInterface.RegisterFunction<std::wstring, &JSI_Lobby::LobbyGetRoomSubject>("LobbyGetRoomSubject");
 #endif // CONFIG2_LOBBY
-
-	// Internationalization and localization functions
-	scriptInterface.RegisterFunction<std::wstring, int, &GetBuildTimestamp>("GetBuildTimestamp");
-	scriptInterface.RegisterFunction<std::string, &getCurrentLocale>("getCurrentLocale");
-	scriptInterface.RegisterFunction<std::wstring, std::wstring, &translate>("translate");
-	scriptInterface.RegisterFunction<std::wstring, std::string, std::wstring, &translateWithContext>("translateWithContext");
-	scriptInterface.RegisterFunction<std::wstring, std::wstring, std::wstring, int, &translatePlural>("translatePlural");
-	scriptInterface.RegisterFunction<std::wstring, std::string, std::wstring, std::wstring, int, &translatePluralWithContext>("translatePluralWithContext");
-	scriptInterface.RegisterFunction<std::wstring, std::wstring, &translateLines>("translateLines");
-	scriptInterface.RegisterFunction<std::vector<std::wstring>, std::vector<std::wstring>, &translateArray>("translateArray");
-	scriptInterface.RegisterFunction<std::wstring, int, std::wstring, &formatMillisecondsIntoDateString>("formatMillisecondsIntoDateString");
-	scriptInterface.RegisterFunction<std::wstring, double, &formatDecimalNumberIntoString>("formatDecimalNumberIntoString");
-	scriptInterface.RegisterFunction<std::wstring, std::wstring, &markToTranslate>("markToTranslate");
-	scriptInterface.RegisterFunction<std::vector<std::string>, &GetSupportedLocaleCodes>("GetSupportedLocaleCodes");
-	scriptInterface.RegisterFunction<std::vector<std::wstring>, &GetSupportedLocaleDisplayNames>("GetSupportedLocaleDisplayNames");
-	scriptInterface.RegisterFunction<int, &GetCurrentLocaleIndex>("GetCurrentLocaleIndex");
-	scriptInterface.RegisterFunction<void, std::string, &SetLocale>("SetLocale");
 }

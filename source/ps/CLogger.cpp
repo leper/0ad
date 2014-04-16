@@ -1,4 +1,4 @@
-/* Copyright (C) 2012 Wildfire Games.
+/* Copyright (C) 2014 Wildfire Games.
  * This file is part of 0 A.D.
  *
  * 0 A.D. is free software: you can redistribute it and/or modify
@@ -306,17 +306,17 @@ void CLogger::Render()
 		if (it->method == Normal)
 		{
 			textRenderer.Color(0.0f, 0.8f, 0.0f);
-			textRenderer.PrintfAdvance(wstring_from_utf8(L10n::instance().translate("[%8.3f] info: ")).c_str(), it->time);
+			textRenderer.PrintfAdvance(wstring_from_utf8(L10n::Instance().Translate("[%8.3f] info: ")).c_str(), it->time);
 		}
 		else if (it->method == Warning)
 		{
 			textRenderer.Color(1.0f, 1.0f, 0.0f);
-			textRenderer.PrintfAdvance(wstring_from_utf8(L10n::instance().translate("[%8.3f] warning: ")).c_str(), it->time);
+			textRenderer.PrintfAdvance(wstring_from_utf8(L10n::Instance().Translate("[%8.3f] warning: ")).c_str(), it->time);
 		}
 		else
 		{
 			textRenderer.Color(1.0f, 0.0f, 0.0f);
-			textRenderer.PrintfAdvance(wstring_from_utf8(L10n::instance().translate("[%8.3f] error: ")).c_str(), it->time);
+			textRenderer.PrintfAdvance(wstring_from_utf8(L10n::Instance().Translate("[%8.3f] error: ")).c_str(), it->time);
 		}
 
 		// Display the actual message in white so it's more readable

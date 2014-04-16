@@ -1,4 +1,4 @@
-/* Copyright (c) 2013 Wildfire Games
+/* Copyright (c) 2014 Wildfire Games
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -42,27 +42,27 @@ public:
 
 	enum DateTimeType { DateTime, Date, Time };
 
-	static L10n& instance();
+	static L10n& Instance();
 
-	Locale getCurrentLocale();
-	void setCurrentLocale(const std::string& localeCode);
-	void setCurrentLocale(Locale locale);
-	std::vector<std::string> getSupportedLocaleCodes();
-	std::vector<std::wstring> getSupportedLocaleDisplayNames();
-	int getCurrentLocaleIndex();
+	Locale GetCurrentLocale();
+	void SetCurrentLocale(const std::string& localeCode);
+	void SetCurrentLocale(Locale locale);
+	std::vector<std::string> GetSupportedLocaleCodes();
+	std::vector<std::wstring> GetSupportedLocaleDisplayNames();
+	int GetCurrentLocaleIndex();
 
-	std::string translate(const std::string& sourceString);
-	std::string translateWithContext(const std::string& context, const std::string& sourceString);
-	std::string translatePlural(const std::string& singularSourceString, const std::string& pluralSourceString, int number);
-	std::string translatePluralWithContext(const std::string& context, const std::string& singularSourceString, const std::string& pluralSourceString, int number);
-	std::string translateLines(const std::string& sourceString);
+	std::string Translate(const std::string& sourceString);
+	std::string TranslateWithContext(const std::string& context, const std::string& sourceString);
+	std::string TranslatePlural(const std::string& singularSourceString, const std::string& pluralSourceString, int number);
+	std::string TranslatePluralWithContext(const std::string& context, const std::string& singularSourceString, const std::string& pluralSourceString, int number);
+	std::string TranslateLines(const std::string& sourceString);
 
-	UDate parseDateTime(const std::string& dateTimeString, const std::string& dateTimeFormat, const Locale& locale);
-	std::string localizeDateTime(const UDate& dateTime, DateTimeType type, DateFormat::EStyle style);
-	std::string formatMillisecondsIntoDateString(int milliseconds, const std::string& formatString);
-	std::string formatDecimalNumberIntoString(double number);
+	UDate ParseDateTime(const std::string& dateTimeString, const std::string& dateTimeFormat, const Locale& locale);
+	std::string LocalizeDateTime(const UDate& dateTime, DateTimeType type, DateFormat::EStyle style);
+	std::string FormatMillisecondsIntoDateString(int milliseconds, const std::string& formatString);
+	std::string FormatDecimalNumberIntoString(double number);
 
-	VfsPath localizePath(VfsPath sourcePath);
+	VfsPath LocalizePath(VfsPath sourcePath);
 
 private:
 
@@ -72,13 +72,13 @@ private:
 	std::vector<Locale*> availableLocales;
 	bool currentLocaleIsOriginalGameLocale;
 
-	Locale getConfiguredOrSystemLocale();
-	void loadDictionaryForCurrentLocale();
-	void loadListOfAvailableLocales();
+	Locale GetConfiguredOrSystemLocale();
+	void LoadDictionaryForCurrentLocale();
+	void LoadListOfAvailableLocales();
 
-	void readPoIntoDictionary(const std::string& poContent, tinygettext::Dictionary* dictionary);
+	void ReadPoIntoDictionary(const std::string& poContent, tinygettext::Dictionary* dictionary);
 
-	DateFormat* createDateTimeInstance(DateTimeType type, DateFormat::EStyle style, const Locale& locale);
+	DateFormat* CreateDateTimeInstance(DateTimeType type, DateFormat::EStyle style, const Locale& locale);
 };
 
 #endif // L10N_H

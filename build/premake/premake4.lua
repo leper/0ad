@@ -700,7 +700,8 @@ function setup_all_libs ()
 		"soundmanager/scripting",
 		"maths",
 		"maths/scripting",
-		"i18n"
+		"i18n",
+		"i18n/scripting"
 	}
 	extern_libs = {
 		"spidermonkey",

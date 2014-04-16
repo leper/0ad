@@ -259,7 +259,7 @@ function iColorToString(color)
  */
 function timeToString(time)
 {
-	return Engine.formatMillisecondsIntoDateString(time, translate("HH:mm:ss"));
+	return Engine.FormatMillisecondsIntoDateString(time, translate("HH:mm:ss"));
 }
 
 // ====================================================================

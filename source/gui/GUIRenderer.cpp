@@ -1,4 +1,4 @@
-/* Copyright (C) 2013 Wildfire Games.
+/* Copyright (C) 2014 Wildfire Games.
  * This file is part of 0 A.D.
  *
  * 0 A.D. is free software: you can redistribute it and/or modify
@@ -201,7 +201,7 @@ void GUIRenderer::UpdateDrawCallCache(DrawCalls &Calls, const CStr& SpriteName, 
 
 		if (!(*cit)->m_TextureName.empty())
 		{
-			CTextureProperties textureProps(L10n::instance().localizePath((*cit)->m_TextureName));
+			CTextureProperties textureProps(L10n::Instance().LocalizePath((*cit)->m_TextureName));
 			textureProps.SetWrap((*cit)->m_WrapMode);
 			CTexturePtr texture = g_Renderer.GetTextureManager().CreateTexture(textureProps);
 			texture->Prefetch();

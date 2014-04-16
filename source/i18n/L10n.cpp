@@ -1,4 +1,4 @@
-/* Copyright (c) 2013 Wildfire Games
+/* Copyright (c) 2014 Wildfire Games
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -36,7 +36,7 @@
 #include "ps/GameSetup/GameSetup.h"
 
 
-L10n& L10n::instance()
+L10n& L10n::Instance()
 {
 	static L10n m_instance;
 	return m_instance;
@@ -45,8 +45,8 @@ L10n& L10n::instance()
 L10n::L10n()
 	: currentLocaleIsOriginalGameLocale(false), dictionary(new tinygettext::Dictionary())
 {
-	loadListOfAvailableLocales();
-	setCurrentLocale(getConfiguredOrSystemLocale());
+	LoadListOfAvailableLocales();
+	SetCurrentLocale(GetConfiguredOrSystemLocale());
 }
 
 L10n::~L10n()
@@ -54,26 +54,26 @@ L10n::~L10n()
 	delete dictionary;
 }
 
-Locale L10n::getCurrentLocale()
+Locale L10n::GetCurrentLocale()
 {
 	return currentLocale;
 }
 
-void L10n::setCurrentLocale(const std::string& localeCode)
+void L10n::SetCurrentLocale(const std::string& localeCode)
 {
-	setCurrentLocale(Locale(Locale::createCanonical(localeCode.c_str())));
+	SetCurrentLocale(Locale(Locale::createCanonical(localeCode.c_str())));
 }
 
-void L10n::setCurrentLocale(Locale locale)
+void L10n::SetCurrentLocale(Locale locale)
 {
 	bool reload = (currentLocale != locale) == TRUE;
 	currentLocale = locale;
 	currentLocaleIsOriginalGameLocale = (currentLocale == Locale::getUS()) == TRUE;
 	if (reload && !currentLocaleIsOriginalGameLocale)
-		loadDictionaryForCurrentLocale();
+		LoadDictionaryForCurrentLocale();
 }
 
-std::vector<std::string> L10n::getSupportedLocaleCodes()
+std::vector<std::string> L10n::GetSupportedLocaleCodes()
 {
 	std::vector<std::string> supportedLocaleCodes;
 	for (std::vector<Locale*>::iterator iterator = availableLocales.begin(); iterator != availableLocales.end(); ++iterator)
@@ -85,7 +85,7 @@ std::vector<std::string> L10n::getSupportedLocaleCodes()
 	return supportedLocaleCodes;
 }
 
-std::vector<std::wstring> L10n::getSupportedLocaleDisplayNames()
+std::vector<std::wstring> L10n::GetSupportedLocaleDisplayNames()
 {
 	std::vector<std::wstring> supportedLocaleDisplayNames;
 	for (std::vector<Locale*>::iterator iterator = availableLocales.begin(); iterator != availableLocales.end(); ++iterator)
@@ -93,7 +93,7 @@ std::vector<std::wstring> L10n::getSupportedLocaleDisplayNames()
 		if (strcmp((*iterator)->getBaseName(), "long") == 0)
 		{
 			if (InDevelopmentCopy())
-				supportedLocaleDisplayNames.push_back(wstring_from_utf8(L10n::instance().translate("Long strings")));
+				supportedLocaleDisplayNames.push_back(wstring_from_utf8(Translate("Long strings")));
 			continue;
 		}
 
@@ -109,7 +109,7 @@ std::vector<std::wstring> L10n::getSupportedLocaleDisplayNames()
 	return supportedLocaleDisplayNames;
 }
 
-int L10n::getCurrentLocaleIndex()
+int L10n::GetCurrentLocaleIndex()
 {
 	int languageCodeOnly = -1;
 	int defaultLocale = -1;
@@ -117,10 +117,10 @@ int L10n::getCurrentLocaleIndex()
 	// Check for an exact match (whole code) first, then for the same language and at last for the default locale en_US
 	for (std::vector<Locale*>::iterator iterator = availableLocales.begin(); iterator != availableLocales.end(); ++iterator)
 	{
-		if (strcmp((**iterator).getBaseName(), getCurrentLocale().getBaseName()) == 0)
+		if (strcmp((**iterator).getBaseName(), GetCurrentLocale().getBaseName()) == 0)
 			return iterator - availableLocales.begin();
 
-		if (languageCodeOnly < 0 && strcmp((**iterator).getLanguage(), getCurrentLocale().getLanguage()) == 0)
+		if (languageCodeOnly < 0 && strcmp((**iterator).getLanguage(), GetCurrentLocale().getLanguage()) == 0)
 			languageCodeOnly = iterator - availableLocales.begin();
 
 		if (defaultLocale < 0 && strcmp((**iterator).getLanguage(), Locale::getUS().getLanguage()) == 0)
@@ -137,7 +137,7 @@ int L10n::getCurrentLocaleIndex()
 	return 0;
 }
 
-std::string L10n::translate(const std::string& sourceString)
+std::string L10n::Translate(const std::string& sourceString)
 {
 	if (!currentLocaleIsOriginalGameLocale)
 		return dictionary->translate(sourceString);
@@ -145,7 +145,7 @@ std::string L10n::translate(const std::string& sourceString)
 	return sourceString;
 }
 
-std::string L10n::translateWithContext(const std::string& context, const std::string& sourceString)
+std::string L10n::TranslateWithContext(const std::string& context, const std::string& sourceString)
 {
 	if (!currentLocaleIsOriginalGameLocale)
 		return dictionary->translate_ctxt(context, sourceString);
@@ -153,7 +153,7 @@ std::string L10n::translateWithContext(const std::string& context, const std::st
 	return sourceString;
 }
 
-std::string L10n::translatePlural(const std::string& singularSourceString, const std::string& pluralSourceString, int number)
+std::string L10n::TranslatePlural(const std::string& singularSourceString, const std::string& pluralSourceString, int number)
 {
 	if (!currentLocaleIsOriginalGameLocale)
 		return dictionary->translate_plural(singularSourceString, pluralSourceString, number);
@@ -164,7 +164,7 @@ std::string L10n::translatePlural(const std::string& singularSourceString, const
 	return pluralSourceString;
 }
 
-std::string L10n::translatePluralWithContext(const std::string& context, const std::string& singularSourceString, const std::string& pluralSourceString, int number)
+std::string L10n::TranslatePluralWithContext(const std::string& context, const std::string& singularSourceString, const std::string& pluralSourceString, int number)
 {
 	if (!currentLocaleIsOriginalGameLocale)
 		return dictionary->translate_ctxt_plural(context, singularSourceString, pluralSourceString, number);
@@ -175,21 +175,21 @@ std::string L10n::translatePluralWithContext(const std::string& context, const s
 	return pluralSourceString;
 }
 
-std::string L10n::translateLines(const std::string& sourceString)
+std::string L10n::TranslateLines(const std::string& sourceString)
 {
 	std::string targetString;
 	std::stringstream stringOfLines(sourceString);
 	std::string line;
 
 	while (std::getline(stringOfLines, line)) {
-		targetString.append(translate(line));
+		targetString.append(Translate(line));
 		targetString.append("\n");
 	}
 
 	return targetString;
 }
 
-UDate L10n::parseDateTime(const std::string& dateTimeString, const std::string& dateTimeFormat, const Locale& locale)
+UDate L10n::ParseDateTime(const std::string& dateTimeString, const std::string& dateTimeFormat, const Locale& locale)
 {
 	UErrorCode success = U_ZERO_ERROR;
 	UnicodeString utf16DateTimeString = UnicodeString::fromUTF8(dateTimeString.c_str());
@@ -202,11 +202,11 @@ UDate L10n::parseDateTime(const std::string& dateTimeString, const std::string& 
 	return date;
 }
 
-std::string L10n::localizeDateTime(const UDate& dateTime, DateTimeType type, DateFormat::EStyle style)
+std::string L10n::LocalizeDateTime(const UDate& dateTime, DateTimeType type, DateFormat::EStyle style)
 {
 	UnicodeString utf16Date;
 
-	DateFormat* dateFormatter = createDateTimeInstance(type, style, currentLocale);
+	DateFormat* dateFormatter = CreateDateTimeInstance(type, style, currentLocale);
 	dateFormatter->format(dateTime, utf16Date);
 	char utf8Date[512];
 	CheckedArrayByteSink sink(utf8Date, ARRAY_SIZE(utf8Date));
@@ -217,7 +217,7 @@ std::string L10n::localizeDateTime(const UDate& dateTime, DateTimeType type, Dat
 	return std::string(utf8Date, sink.NumberOfBytesWritten());
 }
 
-std::string L10n::formatMillisecondsIntoDateString(int milliseconds, const std::string& formatString)
+std::string L10n::FormatMillisecondsIntoDateString(int milliseconds, const std::string& formatString)
 {
 	UErrorCode success = U_ZERO_ERROR;
 	UnicodeString utf16Date;
@@ -240,7 +240,7 @@ std::string L10n::formatMillisecondsIntoDateString(int milliseconds, const std::
 	return std::string(utf8Date, sink.NumberOfBytesWritten());
 }
 
-std::string L10n::formatDecimalNumberIntoString(double number)
+std::string L10n::FormatDecimalNumberIntoString(double number)
 {
 	UErrorCode success = U_ZERO_ERROR;
 	UnicodeString utf16Number;
@@ -254,7 +254,7 @@ std::string L10n::formatDecimalNumberIntoString(double number)
 	return std::string(utf8Number, sink.NumberOfBytesWritten());
 }
 
-VfsPath L10n::localizePath(VfsPath sourcePath)
+VfsPath L10n::LocalizePath(VfsPath sourcePath)
 {
 	VfsPath path = sourcePath;
 
@@ -265,7 +265,7 @@ VfsPath L10n::localizePath(VfsPath sourcePath)
 	return path;
 }
 
-Locale L10n::getConfiguredOrSystemLocale()
+Locale L10n::GetConfiguredOrSystemLocale()
 {
 	std::string locale;
 	CFG_GET_VAL("locale", String, locale);
@@ -275,7 +275,7 @@ Locale L10n::getConfiguredOrSystemLocale()
 		return Locale::getDefault();
 }
 
-void L10n::loadDictionaryForCurrentLocale()
+void L10n::LoadDictionaryForCurrentLocale()
 {
 	delete dictionary;
 	dictionary = new tinygettext::Dictionary();
@@ -290,11 +290,11 @@ void L10n::loadDictionaryForCurrentLocale()
 		CVFSFile file;
 		file.Load(g_VFS, filename);
 		std::string content = file.DecodeUTF8();
-		readPoIntoDictionary(content, dictionary);
+		ReadPoIntoDictionary(content, dictionary);
 	}
 }
 
-void L10n::loadListOfAvailableLocales()
+void L10n::LoadListOfAvailableLocales()
 {
 	for (std::vector<Locale*>::iterator iterator = availableLocales.begin(); iterator != availableLocales.end(); ++iterator)
 		delete *iterator;
@@ -332,7 +332,7 @@ void L10n::loadListOfAvailableLocales()
 	}
 }
 
-void L10n::readPoIntoDictionary(const std::string& poContent, tinygettext::Dictionary* dictionary)
+void L10n::ReadPoIntoDictionary(const std::string& poContent, tinygettext::Dictionary* dictionary)
 {
 	try
 	{
@@ -345,7 +345,7 @@ void L10n::readPoIntoDictionary(const std::string& poContent, tinygettext::Dicti
 	}
 }
 
-DateFormat* L10n::createDateTimeInstance(L10n::DateTimeType type, DateFormat::EStyle style, const Locale& locale)
+DateFormat* L10n::CreateDateTimeInstance(L10n::DateTimeType type, DateFormat::EStyle style, const Locale& locale)
 {
 	switch(type)
 	{

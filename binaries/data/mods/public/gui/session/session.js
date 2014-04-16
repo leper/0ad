@@ -812,7 +812,7 @@ function updateTimeElapsedCounter()
 	var simState = GetSimState();
 	var timeElapsedCounter = Engine.GetGUIObjectByName("timeElapsedCounter");
 	if (g_CurrentSpeed != 1.0)
-		timeElapsedCounter.caption = sprintf(translate("%(time)s (%(speed)sx)"), { time: timeToString(simState.timeElapsed), speed: Engine.formatDecimalNumberIntoString(g_CurrentSpeed) });
+		timeElapsedCounter.caption = sprintf(translate("%(time)s (%(speed)sx)"), { time: timeToString(simState.timeElapsed), speed: Engine.FormatDecimalNumberIntoString(g_CurrentSpeed) });
 	else
 		timeElapsedCounter.caption = timeToString(simState.timeElapsed);
 }

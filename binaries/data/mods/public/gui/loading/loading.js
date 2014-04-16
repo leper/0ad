@@ -15,7 +15,7 @@ function init(data)
 	{
 		// Set tip text
 		var tipTextFilePath = tipTextLoadingArray[getRandom (0, tipTextLoadingArray.length-1)];
-		var tipText = Engine.translateLines(Engine.ReadFile(tipTextFilePath));
+		var tipText = Engine.TranslateLines(Engine.ReadFile(tipTextFilePath));
 
 		if (tipText)
 		{
