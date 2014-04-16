@@ -269,7 +269,7 @@
 						if (!Engine.StartXmppClient)
 						{
 							this.enabled = false;
-							this.tooltip = translate("Launch the multiplayer lobby. [DISABLED BY BUILD]");
+							this.tooltip = getLobbyDisabledByBuild();
 						}
 					</action>
 				</object>

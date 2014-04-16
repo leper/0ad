@@ -355,3 +355,8 @@ function pressedScenarioEditorButton()
 	else
 		messageBox(400, 200, translate("The scenario editor is not available or failed to load."), translate("Error"), 2);
 }
+
+function getLobbyDisabledByBuild()
+{
+	return translate("Launch the multiplayer lobby. [DISABLED BY BUILD]");
+}

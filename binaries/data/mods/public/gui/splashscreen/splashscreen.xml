@@ -34,10 +34,8 @@
 		<object type="button" style="StoneButton" size="192 100%-52 356 100%-24">
 			<translatableAttribute id="caption">Known issues (web)</translatableAttribute>
 			<action on="Press"><![CDATA[
-				var url = "http://www.wildfiregames.com/forum/index.php?showtopic=15796";
-				Engine.OpenURL(url);
-				messageBox(600, 200, sprintf(translate("Opening %(url)s\n in default web browser. Please wait..."), { url: url }), translate("Opening page"), 2);
-				]]></action>
+				openURL("http://www.wildfiregames.com/forum/index.php?showtopic=15796");
+			]]></action>
 		</object>
 	</object>
 	

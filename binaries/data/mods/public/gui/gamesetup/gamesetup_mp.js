@@ -235,3 +235,8 @@ function startJoin(playername, ip)
 		Engine.LobbySetPlayerPresence("playing");
 	return true;
 }
+
+function getDefaultGameName()
+{
+	return sprintf(translate("%(playername)s's game"), { playername: Engine.ConfigDB_GetValue("user", "playername")});
+}
