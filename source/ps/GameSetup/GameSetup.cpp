@@ -1330,6 +1330,9 @@ void CancelLoad(const CStrW& message)
 bool InDevelopmentCopy()
 {
 	if (!g_CheckedIfInDevelopmentCopy)
+	{
 		g_InDevelopmentCopy = (g_VFS->GetFileInfo(L"config/dev.cfg", NULL) == INFO::OK);
+		g_CheckedIfInDevelopmentCopy = true;
+	}
 	return g_InDevelopmentCopy;
 }
