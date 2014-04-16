@@ -318,7 +318,7 @@ function formatPlayerListEntry(nickname, presence, rating, role)
 		status = translate("Offline");
 		break;
 	default:
-		warn(sprintf(translate("Unknown presence '%(presence)s'"), { presence: presence }));
+		warn(sprintf("Unknown presence '%(presence)s'", { presence: presence }));
 		color = "178 178 178";
 		status = translateWithContext("lobby presence", "Unknown");
 		break;
@@ -367,7 +367,7 @@ function updateGameSelection()
 		mapData = Engine.LoadMapSettings(g_GameList[g].mapName + ".xml");
 	else
 		// Warn the player if we can't find the map. 
-		warn(sprintf(translate("Map '%(mapName)s' not found locally."), { mapName: g_GameList[g].mapName }));
+		warn(sprintf("Map '%(mapName)s' not found locally.", { mapName: g_GameList[g].mapName }));
 
 	// Show the game info panel and join button.
 	Engine.GetGUIObjectByName("gameInfo").hidden = false;
@@ -541,7 +541,7 @@ function onTick()
 				updateSubject(message.text);
 				break;
 			default:
-				warn(sprintf(translate("Unknown message.level '%(msglvl)s'"), { msglvl: message.level }));
+				warn(sprintf("Unknown message.level '%(msglvl)s'", { msglvl: message.level }));
 				break;
 			}
 			// Push new data to GUI
@@ -591,7 +591,7 @@ function onTick()
 			}
 			break;
 		default:
-			error(sprintf(translate("Unrecognised message type %(msgtype)s"), { msgtype: message.type }));
+			error(sprintf("Unrecognised message type %(msgtype)s", { msgtype: message.type }));
 		}
 	}
 }

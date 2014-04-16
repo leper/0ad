@@ -241,7 +241,7 @@ function getStanceDisplayName(name)
 			displayName = translate("Standground");
 			break;
 		default:
-			warn(sprintf(translate("Internationalization: Unexpected stance found with code ‘%(stance)s’. This stance must be internationalized."), { stance: name }));
+			warn(sprintf("Internationalization: Unexpected stance found with code ‘%(stance)s’. This stance must be internationalized.", { stance: name }));
 			displayName = name;
 			break;
 	}
@@ -1165,7 +1165,7 @@ function updateUnitCommands(entState, supplementalDetailsPanel, commandsPanel, s
 						}
 						else
 						{
-							warn(sprintf(translate("Internationalization: Unexpected combination of ‘%(localizedWall)s’ (%(englishWall)s) and ‘%(localizedGate)s’ (%(englishGate)s). This combination of wall and gate types must be internationalized."), { localizedWall: translate(wallName), englishWall: wallName, localizedGate: translate(gateName), englishGate: gateName }));
+							warn(sprintf("Internationalization: Unexpected combination of ‘%(localizedWall)s’ (%(englishWall)s) and ‘%(localizedGate)s’ (%(englishGate)s). This combination of wall and gate types must be internationalized.", { localizedWall: translate(wallName), englishWall: wallName, localizedGate: translate(gateName), englishGate: gateName }));
 							tooltipString = sprintf(translate("Convert %(wall)s into %(gate)s"), { wall: translate(wallName), gate: translate(gateName) });
 						}
 

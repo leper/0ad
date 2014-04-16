@@ -77,7 +77,7 @@ function reallyLoadGame(gameId)
 	{
 		// Probably the file wasn't found
 		// Show error and refresh saved game list
-		error(sprintf(translate("Could not load saved game '%(id)s'"), { id: gameId }));
+		error(sprintf("Could not load saved game '%(id)s'", { id: gameId }));
 		init();
 	}
 	else
@@ -106,7 +106,7 @@ function deleteGame()
 function reallyDeleteGame(gameID)
 {
 	if (!Engine.DeleteSavedGame(gameID))
-		error(sprintf(translate("Could not delete saved game '%(id)s'"), { id: gameID }));
+		error(sprintf("Could not delete saved game '%(id)s'", { id: gameID }));
 
 	// Run init again to refresh saved game list
 	init();

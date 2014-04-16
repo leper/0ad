@@ -34,7 +34,7 @@ function init(data)
 	}
 	else
 	{
-		error(translate("Failed to find any matching tips for the loading screen."))
+		error("Failed to find any matching tips for the loading screen.")
 	}
 
 	// janwas: main loop now sets progress / description, but that won't
@@ -56,7 +56,7 @@ function init(data)
 			break;
 
 		default:
-			error(sprintf(translate("Unknown map type: %(mapType)s"), { mapType: data.attribs.mapType }));
+			error(sprintf("Unknown map type: %(mapType)s", { mapType: data.attribs.mapType }));
 		}
 	}
 

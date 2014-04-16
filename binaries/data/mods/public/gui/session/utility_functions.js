@@ -618,7 +618,7 @@ function getEntityNames(template)
 	if (template.name.generic)
 		return template.name.generic;
 
-	warn(translate("Entity name requested on an entity without a name, specific or generic."));
+	warn("Entity name requested on an entity without a name, specific or generic.");
 	return translate("???");
 }
 
@@ -702,7 +702,7 @@ function getAttackTypeLabel(type)
 	if (type === "Melee") return translate("Melee Attack:");
 	if (type === "Ranged") return translate("Ranged Attack:");
 
-	warn(sprintf(translate("Internationalization: Unexpected attack type found with code ‘%(attackType)s’. This attack type must be internationalized."), { attackType: type }));
+	warn(sprintf("Internationalization: Unexpected attack type found with code ‘%(attackType)s’. This attack type must be internationalized.", { attackType: type }));
 	return translate("Attack:");
 }
 

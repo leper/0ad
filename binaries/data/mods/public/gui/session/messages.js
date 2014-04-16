@@ -19,7 +19,7 @@ function getCheatsData()
 	{
 		var currentCheat = parseJSONData("simulation/data/cheats/"+fileName+".json");
 		if (Object.keys(cheats).indexOf(currentCheat.Name) !== -1)
-			warn(sprintf(translate("Cheat name '%(name)s' is already present"), { name: currentCheat.Name }));
+			warn(sprintf("Cheat name '%(name)s' is already present", { name: currentCheat.Name }));
 		else
 			cheats[currentCheat.Name] = currentCheat.Data;
 	}
@@ -204,7 +204,7 @@ function handleNetMessage(message)
 			obj.hidden = false;
 			break;
 		default:
-			error(sprintf(translate("Unrecognised netstatus type %(netType)s"), { netType: message.status }));
+			error(sprintf("Unrecognised netstatus type %(netType)s", { netType: message.status }));
 			break;
 		}
 		break;
@@ -256,7 +256,7 @@ function handleNetMessage(message)
 		break;
 
 	default:
-		error(sprintf(translate("Unrecognised net message type %(messageType)s"), { messageType: message.type }));
+		error(sprintf("Unrecognised net message type %(messageType)s", { messageType: message.type }));
 	}
 }
 
@@ -516,7 +516,7 @@ function addChatMessage(msg, playerAssignments)
 		}
 		break;
 	default:
-		error(sprintf(translate("Invalid chat message '%(message)s'"), { message: uneval(msg) }));
+		error(sprintf("Invalid chat message '%(message)s'", { message: uneval(msg) }));
 		return;
 	}
 

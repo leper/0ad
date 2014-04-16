@@ -82,7 +82,7 @@ function init(attribs)
 		g_IsController = false;
 		break;
 	default:
-		error(sprintf(translate("Unexpected 'type' in gamesetup init: %(unexpectedType)s"), { unexpectedType: attribs.type }));
+		error(sprintf("Unexpected 'type' in gamesetup init: %(unexpectedType)s", { unexpectedType: attribs.type }));
 	}
 
 	if (attribs.serverName)
@@ -526,7 +526,7 @@ function initMapNameList()
 		break;
 
 	default:
-		error(sprintf(translate("initMapNameList: Unexpected map type '%(mapType)s'"), { mapType: g_GameAttributes.mapType }));
+		error(sprintf("initMapNameList: Unexpected map type '%(mapType)s'", { mapType: g_GameAttributes.mapType }));
 		return;
 	}
 
@@ -589,7 +589,7 @@ function loadMapData(name)
 			break;
 
 		default:
-			error(sprintf(translate("loadMapData: Unexpected map type '%(mapType)s'"), { mapType: g_GameAttributes.mapType }));
+			error(sprintf("loadMapData: Unexpected map type '%(mapType)s'", { mapType: g_GameAttributes.mapType }));
 			return undefined;
 		}
 	}
@@ -743,7 +743,7 @@ function selectMapType(type)
 		break;
 
 	default:
-		error(sprintf(translate("selectMapType: Unexpected map type '%(mapType)s'"), { mapType: g_GameAttributes.mapType }));
+		error(sprintf("selectMapType: Unexpected map type '%(mapType)s'", { mapType: g_GameAttributes.mapType }));
 		return;
 	}
 
@@ -828,7 +828,7 @@ function launchGame()
 {
 	if (g_IsNetworked && !g_IsController)
 	{
-		error(translate("Only host can start game"));
+		error("Only host can start game");
 		return;
 	}
 
@@ -1136,7 +1136,7 @@ function onGameAttributesChange()
 		break;
 
 	default:
-		error(sprintf(translate("onGameAttributesChange: Unexpected map type '%(mapType)s'"), { mapType: g_GameAttributes.mapType }));
+		error(sprintf("onGameAttributesChange: Unexpected map type '%(mapType)s'", { mapType: g_GameAttributes.mapType }));
 		return;
 	}
 
@@ -1319,7 +1319,7 @@ function updatePlayerList()
 				if (aiId in aiAssignments)
 					selection = aiAssignments[aiId];
 				else
-					warn(sprintf(translate("AI \"%(id)s\" not present. Defaulting to unassigned."), { id: aiId }));
+					warn(sprintf("AI \"%(id)s\" not present. Defaulting to unassigned.", { id: aiId }));
 			}
 
 			if (!selection)
@@ -1500,7 +1500,7 @@ function addChatMessage(msg)
 		break;
 
 	default:
-		error(sprintf(translate("Invalid chat message '%(message)s'"), { message: uneval(msg) }));
+		error(sprintf("Invalid chat message '%(message)s'", { message: uneval(msg) }));
 		return;
 	}
 
@@ -1532,7 +1532,7 @@ function addFilter(id, name, filterFunc)
 	}
 	else
 	{
-		error(sprintf(translate("Invalid map filter: %(name)s"), { name: name }));
+		error(sprintf("Invalid map filter: %(name)s", { name: name }));
 	}
 }
 
@@ -1563,7 +1563,7 @@ function testFilter(id, mapSettings)
 		if (g_MapFilters[i].id == id)
 			return g_MapFilters[i].filter(mapSettings);
 
-	error(sprintf(translate("Invalid map filter: %(id)s"), { id: id }));
+	error(sprintf("Invalid map filter: %(id)s", { id: id }));
 	return false;
 }
 

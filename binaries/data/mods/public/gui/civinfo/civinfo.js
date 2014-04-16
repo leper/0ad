@@ -88,7 +88,7 @@ function selectCiv(code)
 	var civInfo = g_CivData[code];
 	
 	if(!civInfo)
-		error(sprintf(translateWithContext("civinfo", "Error loading civ data for \"%(code)s\""), { code: code }));
+		error(sprintf("Error loading civ data for \"%(code)s\"", { code: code }));
 
 	// Update civ gameplay display
 	Engine.GetGUIObjectByName("civGameplayHeading").caption = heading(sprintf(translateWithContext("civinfo", "%(civilization)s Gameplay"), { civilization: civInfo.Name }), 16);

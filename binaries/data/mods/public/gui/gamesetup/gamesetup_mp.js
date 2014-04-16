@@ -37,7 +37,7 @@ function init(attribs)
 			Engine.GetGUIObjectByName("hostPlayerNameWrapper").hidden = false;
 		break;
 	default:
-		error(sprintf(translate("Unrecognised multiplayer game type: %(gameType)s"), { gameType: multiplayerGameType }));
+		error(sprintf("Unrecognised multiplayer game type: %(gameType)s", { gameType: multiplayerGameType }));
 		break;
 	}
 }
@@ -94,7 +94,7 @@ function pollAndHandleNetworkClient()
 					return;
 
 				default:
-					error(sprintf(translate("Unrecognised netstatus type %(netType)s"), { netType: message.status }));
+					error(sprintf("Unrecognised netstatus type %(netType)s", { netType: message.status }));
 					break;
 				}
 				break;
@@ -120,7 +120,7 @@ function pollAndHandleNetworkClient()
 				break;
 
 			default:
-				error(sprintf(translate("Unrecognised net message type %(messageType)s"), { messageType: message.type }));
+				error(sprintf("Unrecognised net message type %(messageType)s", { messageType: message.type }));
 			}
 		}
 		else
@@ -155,12 +155,12 @@ function pollAndHandleNetworkClient()
 					return;
 
 				default:
-					error(sprintf(translate("Unrecognised netstatus type %(netType)s"), { netType: message.status }));
+					error(sprintf("Unrecognised netstatus type %(netType)s", { netType: message.status }));
 					break;
 				}
 				break;
 			default:
-				error(sprintf(translate("Unrecognised net message type %(messageType)s"), { messageType: message.type }));
+				error(sprintf("Unrecognised net message type %(messageType)s", { messageType: message.type }));
 				break;
 			}
 		}
@@ -198,8 +198,8 @@ function startHost(playername, servername)
 	{
 		cancelSetup();
 		messageBox(400, 200,
-			sprintf(translate("Cannot host game: %(message)s."), { message: e.message }),
-			translate("Error"), 2);
+			sprintf("Cannot host game: %(message)s.", { message: e.message }),
+			"Error", 2);
 		return false;
 	}
 
@@ -224,8 +224,8 @@ function startJoin(playername, ip)
 	{
 		cancelSetup();
 		messageBox(400, 200,
-			sprintf(translate("Cannot join game: %(message)s."), { message: e.message }),
-			translate("Error"), 2);
+			sprintf("Cannot join game: %(message)s.", { message: e.message }),
+			"Error", 2);
 		return false;
 	}
 

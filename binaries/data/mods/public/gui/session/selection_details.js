@@ -28,7 +28,7 @@ function getLocalizedResourceName(resourceCode)
 		case "grain": return translate("Grain");
 		case "fish": return translate("Fish");
 		default:
-			warn(sprintf(translate("Internationalization: Unexpected resource type found with code ‘%(resource)s’. This resource type must be internationalized."), { resource: resourceCode }));
+			warn(sprintf("Internationalization: Unexpected resource type found with code ‘%(resource)s’. This resource type must be internationalized.", { resource: resourceCode }));
 			return resourceCode; // It should never get here.
 	}
 }

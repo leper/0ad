@@ -595,7 +595,7 @@ function tryPlaceBuilding(queued)
 {
 	if (placementSupport.mode !== "building")
 	{
-		error(sprintf(translate("[%(functionName)s] Called while in '%(mode)s' placement mode instead of 'building'"), {
+		error(sprintf("[%(functionName)s] Called while in '%(mode)s' placement mode instead of 'building'", {
 			functionName: "tryPlaceBuilding",
 			mode: placementSupport.mode
 		}));
@@ -639,7 +639,7 @@ function tryPlaceWall(queued)
 {
 	if (placementSupport.mode !== "wall")
 	{
-		error(sprintf(translate("[%(functionName)s] Called while in '%(mode)s' placement mode; expected 'wall' mode"), {
+		error(sprintf("[%(functionName)s] Called while in '%(mode)s' placement mode; expected 'wall' mode", {
 			functionName: "tryPlaceWall",
 			mode: placementSupport.mode
 		}));
@@ -649,7 +649,7 @@ function tryPlaceWall(queued)
 	var wallPlacementInfo = updateBuildingPlacementPreview(); // entities making up the wall (wall segments, towers, ...)
 	if (!(wallPlacementInfo === false || typeof(wallPlacementInfo) === "object"))
 	{
-		error(sprintf(translate("[%(functionName)s] Unexpected return value from %(function2Name)s: '%(value)s'; expected either 'false' or 'object'"), {
+		error(sprintf("[%(functionName)s] Unexpected return value from %(function2Name)s: '%(value)s'; expected either 'false' or 'object'", {
 			functionName: "tryPlaceWall",
 			function2Name: "updateBuildingPlacementPreview",
 			value: uneval(placementInfo)
