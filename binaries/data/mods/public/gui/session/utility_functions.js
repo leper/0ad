@@ -604,30 +604,19 @@ function getEntityAttack(template)
 	return attacks.join("\n");
 }
 
-function getEntityName(template)
-{
-	if (template.name.specific)
-		return translate(template.name.specific);
-	if (template.name.generic)
-		return translate(template.name.generic);
-
-	warn(translate("Entity name requested on an entity without a name, specific or generic."));
-	return translate("???");
-}
-
 function getEntityNames(template)
 {
 	if (template.name.specific)
     {
 		if (template.name.generic && template.name.specific != template.name.generic)
 			return sprintf(translate("%(specificName)s (%(genericName)s)"), {
-				specificName: translate(template.name.specific),
-				genericName: translate(template.name.generic)
+				specificName: template.name.specific,
+				genericName: template.name.generic
 			});
-        return translate(template.name.specific);
+        return template.name.specific;
     }
 	if (template.name.generic)
-		return translate(template.name.generic);
+		return template.name.generic;
 
 	warn(translate("Entity name requested on an entity without a name, specific or generic."));
 	return translate("???");
