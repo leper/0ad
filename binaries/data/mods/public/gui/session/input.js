@@ -123,10 +123,18 @@ function updateBuildingPlacementPreview()
 
 			// Show placement info tooltip if invalid position
 			placementSupport.tooltipError = !result.success;
-			placementSupport.tooltipMessage = result.success ? "" : result.message;
+			placementSupport.tooltipMessage = "";
 
 			if (!result.success)
+			{
+				if (result.message && result.parameters)
+				{
+					// translate the message parameters
+					translateObjectKeys(result.parameters, Object.keys(result.parameters), true)
+					placementSupport.tooltipMessage = sprintf(translate(result.message), result.parameters);
+				}
 				return false;
+			}
 
 			if (placementSupport.attack)
 			{
@@ -2265,3 +2273,4 @@ function clearSelection()
 		g_Selection.reset();
 	preSelectedAction = ACTION_NONE;
 }
+

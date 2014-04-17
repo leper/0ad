@@ -1027,8 +1027,9 @@ GuiInterface.prototype.DisplayRallyPoint = function(player, cmd)
  * 
  * Returns result object from CheckPlacement:
  * 	{
- *		"success":	true iff the placement is valid, else false
- *		"message":	message to display in UI for invalid placement, else empty string
+ *		"success":    true iff the placement is valid, else false
+ *		"message":    message to display in UI for invalid placement, else ""
+		"parameters": parameters to use in the message
  *  }
  */
 GuiInterface.prototype.SetBuildingPlacementPreview = function(player, cmd)
@@ -1036,6 +1037,7 @@ GuiInterface.prototype.SetBuildingPlacementPreview = function(player, cmd)
 	var result = {
 		"success": false,
 		"message": "",
+		"parameters": {},
 	}
 
 	// See if we're changing template

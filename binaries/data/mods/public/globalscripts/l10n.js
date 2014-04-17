@@ -1,8 +1,7 @@
-var g_translations = [];
+var g_translations = {};
 var g_pluralTranslations = {};
 var g_translationsWithContext = {};
 var g_pluralTranslationsWithContext = {};
-
 
 // Translates the specified English message into the current language.
 //
@@ -74,27 +73,95 @@ function translatePluralWithContext(context, singularMessage, pluralMessage, num
 	return pluralTranslationWithContext;
 }
 
-
-// Translates any string value in the specified JavaScript object that is associated with a key included in
-// the specified keys array.
+/**
+ * Translates any string value in the specified JavaScript object 
+ * that is associated with a key included in the specified keys array.
+ *
+ * it accepts an object in the form of
+ * 
+ * {
+ *   translatedString1: "my first message",
+ *   unTranslatedString1: "some string",
+ *   ignoredObject: {
+ *     translatedString2: "my second message",
+ *     unTranslatedString2: "some string"
+ *   },
+ *   translatedObject1: {
+ *     message: "my third message",
+ *     context: "message context",
+ *     count: 5,
+ *   },
+ *   translatedObject2: {
+ *     list: ["list", "of", "strings"],
+ *     context: "message context",
+ *     count: 5,
+ *   },
+ * }
+ *
+ * Together with a keys list to translate the strings and objects
+ * ["translatedString1", "translatedString2", "translatedObject1", 
+ * "translatedObject2"]
+ *
+ * The result will be (f.e. in Dutch)
+ * {
+ *  translatedString1: "mijn eerste bericht",
+ *   unTranslatedString1: "some string",
+ *   ignoredObject: {
+ *     translatedString2: "mijn tweede bericht",
+ *     unTranslatedString2: "some string"
+ *   },
+ *   translatedObject1: "mijn derde bericht",
+ *   translatedObject2: "lijst, van, teksten", 
+ * }
+ *
+ * So you see that the keys array can also contain lower-level keys,
+ * And that you can include objects in the keys array to translate 
+ * them with a context or to a plural, or to join a list of translations.
+ */
 function translateObjectKeys(object, keys) {
 	for (var property in object)
 	{
 		if (keys.indexOf(property) > -1)
 		{
-			if (object[property] != "" && object[property] !== undefined)
-			{
+			if (typeof object[property] == "string")
 				object[property] = translate(object[property]);
-			}
-		}
-		else
-		{
-			// From http://stackoverflow.com/a/7390612/939364
-			var variableType = ({}).toString.call(object[property]).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
-			if (variableType === "object" || variableType == "array")
+			else if (object[property] instanceof Object)
 			{
-				translateObjectKeys(object[property], keys);
+				// the translation function
+				var trans = null;
+				if (object[property].context)
+				{
+					if (object[property].count)
+						trans = function(msg) { return translatePluralWithContext(object[property].context, msg, object[property].count);};
+					else
+						trans = function(msg) { return translateWithContext(object[property].context, msg);};
+				}
+				else
+				{
+					if (object[property].count)
+						trans = function(msg) { return translatePlural(msg, object[property].count);};
+					else
+						trans = translate;
+				}
+				if (object[property].message)
+					object[property] = trans(object[property].message);
+				else if (object[property].list)
+				{
+					var translatedList = object[property].list.map(trans);
+					object[property] = translatedList.join(translateWithContext("enumeration", ", "));
+				}
 			}
 		}
+		else if (object[property] instanceof Object)
+			translateObjectKeys(object[property], keys);
 	}
 }
+
+function markForTranslation(message) {
+	return message;
+}
+
+function markForTranslationWithContext(context, message) {
+	return message;
+}
+	

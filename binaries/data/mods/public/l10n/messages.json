@@ -14,7 +14,8 @@
 						"translatePlural": [1, 2],
 						"translateWithContext": [[1], 2],
 						"translatePluralWithContext": [[1], 2, 3],
-						"markForTranslation": [1]
+						"markForTranslation": [1],
+						"markForTranslationWithContext": [[1], 2]
 					},
 					"commentTags": [
 						"Translation:"
@@ -141,7 +142,8 @@
 						"SpecificName": {},
 						"Tooltip": {},
 						"DisabledTooltip": {},
-						"FormationName": {}
+						"FormationName": {},
+						"FromClass": {}
 					}
 				}
 			},
