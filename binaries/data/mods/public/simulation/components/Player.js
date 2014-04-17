@@ -212,10 +212,38 @@ Player.prototype.SubtractResourcesOrNotify = function(amounts)
 	// If we don't have enough resources, send a notification to the player
 	if (amountsNeeded)
 	{
-		var formatted = [];
-		for (var type in amountsNeeded)
-			formatted.push(amountsNeeded[type] + " " + type[0].toUpperCase() + type.substr(1) );
-		var notification = {"player": this.playerID, "message": "Insufficient resources - " + formatted.join(", ")};
+		var parameters = {};
+		parameters.food = {
+			"context": "resource",
+			"message": markForTranslationWithContext("resource", " Food")
+		};
+		parameters.wood = {
+			"context": "resource",
+			"message": markForTranslationWithContext("resource", " Wood")
+		};
+		parameters.stone = {
+			"context": "resource",
+			"message": markForTranslationWithContext("resource", " Stone")
+		};
+		parameters.metal = {
+			"context": "resource",
+			"message": markForTranslationWithContext("resource", " Metal")
+		};
+		parameters.connector = {
+			"context": "enumaration",
+			"message": markForTranslationWithContext("enumeration", ", ")
+		};
+		parameters.start = markForTranslation("Insufficient resources - ");
+
+		var resources = [];
+		for (var type in amountsNeeded) // f.e. "500%(metal)s" -> "500 Metal"
+			resources.push(amountsNeeded[type] + "%("+type+")s");
+
+		// f.e. msg = "%(start)s200%(food)s%(connector)s100%(wood)s"
+		// -> "Insufficient resources - 200 Food, 100 Wood
+		var msg = "%(start)s"+resources.join("%(connector)s");
+
+		var notification = {"player": this.playerID, "message": msg, "parameters": parameters, "translateMessage": false, "translateParameters": true};
 		var cmpGUIInterface = Engine.QueryInterface(SYSTEM_ENTITY, IID_GuiInterface);
 		cmpGUIInterface.PushNotification(notification);
 		return false;

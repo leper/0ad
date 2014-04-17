@@ -142,7 +142,15 @@ function displayNotifications()
 {
 	var messages = [];
 	for each (var n in notifications)
-		messages.push(n.message);
+	{
+		var parameters = n.parameters || {};
+		if (n.translateParameters)
+			translateObjectKeys(parameters, Object.keys(parameters));
+		var message = n.message)
+		if (n.translateMessage)
+			message = translate(message);
+		messages.push(sprintf(message, parameters));
+	}
 	Engine.GetGUIObjectByName("notificationText").caption = messages.join("\n");
 }
 
