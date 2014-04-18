@@ -146,7 +146,7 @@ function displayNotifications()
 		var parameters = n.parameters || {};
 		if (n.translateParameters)
 			translateObjectKeys(parameters, Object.keys(parameters));
-		var message = n.message)
+		var message = n.message;
 		if (n.translateMessage)
 			message = translate(message);
 		messages.push(sprintf(message, parameters));
@@ -156,8 +156,21 @@ function displayNotifications()
 
 function updateTimeNotifications()
 {
-	// TODO TODO TODO 
-	Engine.GetGUIObjectByName("timeNotificationText").caption = Engine.GuiInterfaceCall("GetTimeNotificationText");
+	var notifications =  Engine.GuiInterfaceCall("GetTimeNotifications");
+	var notificationText = "";
+	for (var n of notifications)
+	{
+		var message = n.message;
+		if (n.translateMessage)
+			message = translate(message);
+		var parameters = n.parameters || {};
+		if (n.translateParameters)
+			translateObjectKeys(parameters, Object.keys(parameters));
+		Engine.FormatMillisecondsIntoDateString(Math.ceil(time/1000) * 1000);
+		parameters.time = timeToString(n.time);
+		notificationText += sprintf(message, parameters) + "\n";
+	}
+	Engine.GetGUIObjectByName("timeNotificationText").caption = notificationText;
 }
 
 // Returns [username, playercolor] for the given player
@@ -465,7 +478,7 @@ function addChatMessage(msg, playerAssignments)
 			return;
 
 		[username, playerColor] = getUsernameAndColor(msg.attacker);
-		formatted = sprintf("You have been attacked by %(attacker)s!", { attacker: "[color=\"" + playerColor + "\"]" + username + "[/color]" });
+		formatted = sprintf(translate("You have been attacked by %(attacker)s!"), { attacker: "[color=\"" + playerColor + "\"]" + username + "[/color]" });
 		break;
 	case "message":
 		// May have been hidden by the 'team' command.

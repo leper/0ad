@@ -253,13 +253,17 @@ function iColorToString(color)
 // ====================================================================
 
 /**
- * Convert time in milliseconds to hh:mm:ss string representation.
+ * Convert time in milliseconds to [hh:]mm:ss string representation.
  * @param time Time period in milliseconds (integer)
  * @return String representing time period
  */
 function timeToString(time)
 {
-	return Engine.FormatMillisecondsIntoDateString(time, translate("HH:mm:ss"));
+	if (time < 1000 * 60 * 60)
+		var format = translate("mm:ss");
+	else
+		var format = translate("HH:mm:ss");
+	return Engine.FormatMillisecondsIntoDateString(time, format);
 }
 
 // ====================================================================
