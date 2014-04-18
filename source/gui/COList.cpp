@@ -203,7 +203,7 @@ bool COList::HandleAdditionalChildren(const XMBElement& child, CXeromyces* pFile
 				}
 				else // Ignore.
 				{
-					LOGERROR(L"GUI: tranlatable attribute in olist def that isn't a heading. (object: %hs)", this->GetPresentableName().c_str());
+					LOGERROR(L"GUI: translatable attribute in olist def that isn't a heading. (object: %hs)", this->GetPresentableName().c_str());
 				}
 			}
 		}
