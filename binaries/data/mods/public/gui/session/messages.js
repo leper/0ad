@@ -402,8 +402,6 @@ function addChatMessage(msg, playerAssignments)
 		playerColor = "255 255 255";
 		username = translate("Unknown player");
 	}
-
-	var message = escapeText(msg.text);
 	
 	var formatted;
 	
@@ -483,6 +481,8 @@ function addChatMessage(msg, playerAssignments)
 		// May have been hidden by the 'team' command.
 		if (msg.hide)
 			return;
+
+		var message = escapeText(msg.text);
 
 		if (msg.action)
 		{
