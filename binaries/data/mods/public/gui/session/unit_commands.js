@@ -149,13 +149,12 @@ function formatLimitString(trainEntLimit, trainEntCount, trainEntLimitChangers)
 	var text = "\n\n" + sprintf(translate("Current Count: %(count)s, Limit: %(limit)s."), { count: trainEntCount, limit: trainEntLimit });
 	if (trainEntCount >= trainEntLimit)
 		text = "[color=\"red\"]" + text + "[/color]";
-	// TODO TODO TODO
 	for (var c in trainEntLimitChangers)
 	{
 		if (trainEntLimitChangers[c] > 0)
-			text += "\n" + c + " enlarges the limit with " + trainEntLimitChangers[c] + ".";
+			text += "\n" + sprintf("%(changer)s enlarges the limit with %(change)s.", { changer: c, change: trainEntLimitChangers[c] });
 		else if (trainEntLimitChangers[c] < 0)
-			text += "\n" + c + " lessens the limit with " + (-trainEntLimitChangers[c]) + ".";
+			text += "\n" + sprintf("%(changer)s lessens the limit with %(change)s.", { changer: c, change: (-trainEntLimitChangers[c]) });
 	}
 	return text;
 }
@@ -547,7 +546,6 @@ function setupUnitPanel(guiName, usedPanels, unitEntState, playerState, items, c
 
 				var [entLimit, entCount, canBeAddedCount, entLimitChangers] =
 					getEntityLimitAndCount(playerState, entType);
-				// TODO TODO TODO
 				tooltip += formatLimitString(entLimit, entCount, entLimitChangers);
 
 				break;
