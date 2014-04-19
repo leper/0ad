@@ -513,7 +513,6 @@ function setupUnitPanel(guiName, usedPanels, unitEntState, playerState, items, c
 
 				var [trainEntLimit, trainEntCount, canBeAddedCount, trainEntLimitChangers] =
 					getEntityLimitAndCount(playerState, entType);
-				// TODO TODO TODO
 				tooltip += formatLimitString(trainEntLimit, trainEntCount, trainEntLimitChangers);
 
 				tooltip += "[color=\"255 251 131\"]" + formatBatchTrainingString(buildingsCountToTrainFullBatch, fullBatchSize, remainderBatch) + "[/color]";
@@ -624,10 +623,9 @@ function setupUnitPanel(guiName, usedPanels, unitEntState, playerState, items, c
 		// Get icon image
 		if (guiName == FORMATION)
 		{
-			// TODO TODO TODO
 			var formationInfo = Engine.GuiInterfaceCall("GetFormationInfoFromTemplate", {"templateName": item});
 
-			button.tooltip = formationInfo.name;
+			button.tooltip = translate(formationInfo.name);
 			var formationOk = canMoveSelectionIntoFormation(item);
 			var grayscale = "";
 			button.enabled = formationOk;
@@ -636,8 +634,8 @@ function setupUnitPanel(guiName, usedPanels, unitEntState, playerState, items, c
 				grayscale = "grayscale:";
 
 				// Display a meaningful tooltip why the formation is disabled
- 				button.tooltip += " (disabled)"+formationInfo.tooltip;
- 			}
+				button.tooltip += "\n" + "[color=\"red\"]" + translate(formationInfo.tooltip) + "[/color]";
+			}
 
 			var formationSelected = Engine.GuiInterfaceCall("IsFormationSelected", {
 				"ents": g_Selection.toList(),
