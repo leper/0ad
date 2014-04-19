@@ -34,7 +34,7 @@ function init(attribs)
 	playersNumberFilter.list_data = ["",2,3,4,5,6,7,8];
 
 	var mapTypeFilter = Engine.GetGUIObjectByName("mapTypeFilter");
-	mapTypeFilter.list = [translateWithContext("map type", "Any"), translateWithContext("map type", "Skirmish"), translateWithContext("map type", "Random"), translate("Scenario")];
+	mapTypeFilter.list = [translateWithContext("map", "Any"), translateWithContext("map", "Skirmish"), translateWithContext("map", "Random"), translate("Scenario")];
 	mapTypeFilter.list_data = ["", "skirmish", "random", "scenario"];
 
 	Engine.LobbySetPlayerPresence("available");
