@@ -406,6 +406,6 @@ class xml(Extractor):
                             yield message, None, position + ":" + json.formatBreadcrumbs(breadcrumbs), []
                     elif element.text is not None:
                         if "locationAttributes" in self.keywords[keyword]:
-                            attributes = [element.get(attribute) for attribute in self.keywords[keyword]["locationAttributes"]]
+                            attributes = [element.get(attribute) for attribute in self.keywords[keyword]["locationAttributes"] if attribute in element.attrib]
                             position += " ({attributes})".format(attributes=", ".join(attributes))
                         yield element.text, None, position, []
