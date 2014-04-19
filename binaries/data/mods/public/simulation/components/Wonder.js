@@ -55,7 +55,7 @@ Wonder.prototype.ResetTimer = function(ownerID)
 		"duration": +this.template.TimeTillVictory*1000,
 		"parameters": {"player": cmpPlayer.GetName()},
 		"translateMessage": true,
-		"translateParameters": false,
+		"translateParameters": [],
 	});
 	this.ownMessage = cmpGuiInterface.AddTimeNotification({
 		"message": markForTranslation("You will have won in %(time)s"),

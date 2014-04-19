@@ -36,6 +36,12 @@ Player.prototype.Init = function()
 	this.cheatsEnabled = false;
 	this.cheatTimeMultiplier = 1;
 	this.heroes = [];
+	this.resourceNames = {
+		"food": markForTranslation("Food"),
+		"wood": markForTranslation("Wood"),
+		"metal": markForTranslation("Metal"),
+		"stone": markForTranslation("Stone"),
+	}
 	Engine.QueryInterface(SYSTEM_ENTITY, IID_EndGameManager).CheckConquestCriticalEntities();
 };
 
@@ -213,37 +219,37 @@ Player.prototype.SubtractResourcesOrNotify = function(amounts)
 	if (amountsNeeded)
 	{
 		var parameters = {};
-		parameters.food = {
-			"context": "resource",
-			"message": markForTranslationWithContext("resource", " Food")
-		};
-		parameters.wood = {
-			"context": "resource",
-			"message": markForTranslationWithContext("resource", " Wood")
-		};
-		parameters.stone = {
-			"context": "resource",
-			"message": markForTranslationWithContext("resource", " Stone")
-		};
-		parameters.metal = {
-			"context": "resource",
-			"message": markForTranslationWithContext("resource", " Metal")
-		};
-		parameters.connector = {
-			"context": "enumaration",
-			"message": markForTranslationWithContext("enumeration", ", ")
-		};
-		parameters.start = markForTranslation("Insufficient resources - ");
+		var i = 0;
+		for (var type in amountsNeeded)
+		{
+			i++;
+			parameters["resourceType"+i] = this.resourceNames[type];
+			parameters["resourceAmount"+i] = amountsNeeded[type];
+		}
 
-		var resources = [];
-		for (var type in amountsNeeded) // f.e. "500%(metal)s" -> "500 Metal"
-			resources.push(amountsNeeded[type] + "%("+type+")s");
+		var msg = "";
+		// when marking strings for translations, you need to include the actual string,
+		// not some way to derive the string
+		if (i < 1)
+			warn("Amounts needed but no amounts given?");
+		else if (i == 1)
+			msg = markForTranslation("Insufficient resources - %(resourceAmount1)s %(resourceType1)s");
+		else if (i == 2)
+			msg = markForTranslation("Insufficient resources - %(resourceAmount1)s %(resourceType1)s, %(resourceAmount2)s %(resourceType2)s");
+		else if (i == 3)
+			msg = markForTranslation("Insufficient resources - %(resourceAmount1)s %(resourceType1)s, %(resourceAmount2)s %(resourceType2)s, %(resourceAmount3)s %(resourceType3)s");
+		else if (i == 4)
+			msg = markForTranslation("Insufficient resources - %(resourceAmount1)s %(resourceType1)s, %(resourceAmount2)s %(resourceType2)s, %(resourceAmount3)s %(resourceType3)s, %(resourceAmount4)s %(resourceType4)s");
+		else
+			warn("Localisation: Strings are not localised for more than 4 resources");
 
-		// f.e. msg = "%(start)s200%(food)s%(connector)s100%(wood)s"
-		// -> "Insufficient resources - 200 Food, 100 Wood
-		var msg = "%(start)s"+resources.join("%(connector)s");
-
-		var notification = {"player": this.playerID, "message": msg, "parameters": parameters, "translateMessage": false, "translateParameters": true};
+		var notification = {
+			"player": this.playerID,
+			"message": msg,
+			"parameters": parameters,
+			"translateMessage": true,
+			"translateParameters": ["resourceType1", "resourceType2", "resourceType3", "resourceType4"],
+		};
 		var cmpGUIInterface = Engine.QueryInterface(SYSTEM_ENTITY, IID_GuiInterface);
 		cmpGUIInterface.PushNotification(notification);
 		return false;
