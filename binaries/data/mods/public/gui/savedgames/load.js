@@ -40,31 +40,36 @@ function loadGame()
 	var engineInfo = Engine.GetEngineInfo();
 	if (!hasSameVersion(metadata, engineInfo) || !hasSameMods(metadata, engineInfo))
 	{
-		// TODO TODO TODO
 		// version not compatible ... ask for confirmation
-		var btCaptions = ["Yes", "No"];
+		var btCaptions = [translate("Yes"), translate("No")];
 		var btCode = [function(){ reallyLoadGame(gameId); }, init];
-		var message = "This saved game may not be compatible:";
+		var message = translate("This saved game may not be compatible:");
 		if (!hasSameVersion(metadata, engineInfo))
-			message += "\nIt needs 0AD version " + metadata.version_major
-				+ " while you are running version " + engineInfo.version_major + ".";
+			message += "\n" + sprintf(translate("It needs 0 A.D. version %(requiredVersion)s, while you are running version %(currentVersion)s."), {
+				requiredVersion: metadata.version_major,
+				currentVersion: engineInfo.version_major
+			});
 
 		if (!hasSameMods(metadata, engineInfo))
 		{
 			if (!metadata.mods)         // only for backwards compatibility with previous saved games
 				metadata.mods = [];
 			if (metadata.mods.length == 0)
-				message += "\nIt does not need any mod"
-					+ " while you are running with \"" + engineInfo.mods.join() + "\".";
+				message += "\n" + sprintf(translate("It does not need any mod while you are running with \"%(currentMod)s\"."), {
+					currentMod: engineInfo.mods.join()
+				});
 			else if (engineInfo.mods.length == 0)
-				message += "\nIt needs the mod \"" + metadata.mods.join() + "\""
-					+ " while you are running without mod.";
+				message += "\n" + sprintf(translate("It needs the mod \"%(requiredMod)s\" while you are running without a mod."), {
+					requiredMod: metadata.mods.join()
+				});
 			else
-				message += "\nIt needs the mod \"" + metadata.mods.join() + "\""
-					+ " while you are running with \"" + engineInfo.mods.join() + "\".";
+				message += "\n" + sprintf(translate("It needs the mod \"%(requiredMod)s\" while you are running with \"%(currentMod)s\"."), {
+					requiredMod: metadata.mods.join(),
+					currentMod: engineInfo.mods.join()
+				});
 		}
-		message += "\nDo you still want to proceed ?";
-		messageBox(500, 250, message, "Warning", 0, btCaptions, btCode);
+		message += "\n" + translate("Do you still want to proceed?");
+		messageBox(500, 250, message, translate("Warning"), 0, btCaptions, btCode);
 	}
 	else
 		reallyLoadGame(gameId);
