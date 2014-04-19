@@ -249,8 +249,7 @@
 					<translatableAttribute id="caption">Fortresses</translatableAttribute>
 				</object>
 				<object name="civCentreBuildingsHeading" type="text" style="ModernTabLabelText">
-					<!-- TODO TODO TODO -->
-					<translatableAttribute id="caption">Civ&#160;Centers</translatableAttribute>
+					<translatableAttribute id="caption">Civ Centers</translatableAttribute>
 				</object>
 				<object name="wonderBuildingsHeading" type="text" style="ModernTabLabelText">
 					<translatableAttribute id="caption">Wonders</translatableAttribute>
@@ -871,19 +870,16 @@
 					<translatableAttribute id="caption">Player name</translatableAttribute>
 				</object>
 				<object name="vegetarianRatioHeading" type="text" style="ModernTabLabelText">
-					<!-- TODO TODO TODO -->
-					<translatableAttribute id="caption">Vegetarian&#10;ratio</translatableAttribute>
+					<translatableAttribute id="caption">Vegetarian\nratio</translatableAttribute>
 				</object>
 				<object name="feminisationHeading" type="text" style="ModernTabLabelText">
 					<translatableAttribute id="caption">Feminisation</translatableAttribute>
 				</object>
 				<object name="killDeathRatioHeading" type="text" style="ModernTabLabelText">
-					<!-- TODO TODO TODO -->
-					<translatableAttribute id="caption">Kill / Death&#10;ratio</translatableAttribute>
+					<translatableAttribute id="caption">Kill / Death\nratio</translatableAttribute>
 				</object>
 				<object name="mapExplorationHeading" type="text" style="ModernTabLabelText">
-					<!-- TODO TODO TODO -->
-					<translatableAttribute id="caption">Map&#10;exploration</translatableAttribute>
+					<translatableAttribute id="caption">Map\nexploration</translatableAttribute>
 				</object>
 			</object>
 			
