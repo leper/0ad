@@ -81,20 +81,18 @@ function translatePluralWithContext(context, singularMessage, pluralMessage, num
  * 
  * {
  *   translatedString1: "my first message",
- *   unTranslatedString1: "some string",
+ *   unTranslatedString1: "some English string",
  *   ignoredObject: {
  *     translatedString2: "my second message",
- *     unTranslatedString2: "some string"
+ *     unTranslatedString2: "some English string"
  *   },
  *   translatedObject1: {
- *     message: "my third message",
+ *     message: "my third singular message",
  *     context: "message context",
- *     count: 5,
  *   },
  *   translatedObject2: {
  *     list: ["list", "of", "strings"],
  *     context: "message context",
- *     count: 5,
  *   },
  * }
  *
@@ -105,10 +103,10 @@ function translatePluralWithContext(context, singularMessage, pluralMessage, num
  * The result will be (f.e. in Dutch)
  * {
  *  translatedString1: "mijn eerste bericht",
- *   unTranslatedString1: "some string",
+ *   unTranslatedString1: "some English string",
  *   ignoredObject: {
  *     translatedString2: "mijn tweede bericht",
- *     unTranslatedString2: "some string"
+ *     unTranslatedString2: "some English string"
  *   },
  *   translatedObject1: "mijn derde bericht",
  *   translatedObject2: "lijst, van, teksten", 
@@ -116,7 +114,7 @@ function translatePluralWithContext(context, singularMessage, pluralMessage, num
  *
  * So you see that the keys array can also contain lower-level keys,
  * And that you can include objects in the keys array to translate 
- * them with a context or to a plural, or to join a list of translations.
+ * them with a context, or to join a list of translations.
  */
 function translateObjectKeys(object, keys) {
 	for (var property in object)
@@ -128,21 +126,10 @@ function translateObjectKeys(object, keys) {
 			else if (object[property] instanceof Object)
 			{
 				// the translation function
-				var trans = null;
+				var trans = translate;
 				if (object[property].context)
-				{
-					if (object[property].count)
-						trans = function(msg) { return translatePluralWithContext(object[property].context, msg, object[property].count);};
-					else
-						trans = function(msg) { return translateWithContext(object[property].context, msg);};
-				}
-				else
-				{
-					if (object[property].count)
-						trans = function(msg) { return translatePlural(msg, object[property].count);};
-					else
-						trans = translate;
-				}
+					trans = function(msg) { return translateWithContext(object[property].context, msg);};
+
 				if (object[property].message)
 					object[property] = trans(object[property].message);
 				else if (object[property].list)
