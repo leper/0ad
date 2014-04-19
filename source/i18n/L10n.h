@@ -59,7 +59,7 @@ public:
 
 	UDate ParseDateTime(const std::string& dateTimeString, const std::string& dateTimeFormat, const Locale& locale);
 	std::string LocalizeDateTime(const UDate& dateTime, DateTimeType type, DateFormat::EStyle style);
-	std::string FormatMillisecondsIntoDateString(int milliseconds, const std::string& formatString);
+	std::string FormatMillisecondsIntoDateString(UDate milliseconds, const std::string& formatString);
 	std::string FormatDecimalNumberIntoString(double number);
 
 	VfsPath LocalizePath(VfsPath sourcePath);
