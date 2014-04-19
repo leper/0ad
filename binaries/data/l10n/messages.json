@@ -7,15 +7,18 @@
 		"rules": [
 			{
 				"extractor": "cpp",
-				"filemasks": ["**.cpp"],
+				"filemasks": {
+					"includeMasks": ["**.cpp"],
+					"excludeMasks": ["third_party/**", "tools/**"]
+				},
 				"options": {
 					"keywords": {
-						"translate": [1],
-						"translatePlural": [1, 2],
-						"translateWithContext": [[1], 2],
-						"translatePluralWithContext": [[1], 2, 3],
-						"markForTranslation": [1],
-						"markForTranslationWithContext": [[1], 2]
+						"Translate": [1],
+						"TranslatePlural": [1, 2],
+						"TranslateWithContext": [[1], 2],
+						"TranslatePluralWithContext": [[1], 2, 3],
+						"MarkForTranslation": [1],
+						"MarkForTranslationWithContext": [[1], 2]
 					},
 					"commentTags": [
 						"Localization:"

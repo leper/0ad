@@ -44,10 +44,18 @@ except:
 
 class Extractor(object):
 
-    def __init__(self, directoryPath, filemasks, options={}):
+    def __init__(self, directoryPath=None, filemasks=[], options={}):
+
         self.directoryPath = directoryPath
-        self.filemasks = filemasks
         self.options = options
+
+        if isinstance(filemasks, dict):
+            self.includeMasks = filemasks["includeMasks"]
+            self.excludeMasks = filemasks["excludeMasks"]
+        else:
+            self.includeMasks = filemasks
+            self.excludeMasks = []
+
 
     def run(self):
         """ Extracts messages.
@@ -64,11 +72,16 @@ class Extractor(object):
             filenames.sort()
             for filename in filenames:
                 filename = relpath(os.path.join(root, filename).replace(os.sep, '/'), self.directoryPath)
-                for filemask in self.filemasks:
+                for filemask in self.excludeMasks:
                     if pathmatch(filemask, filename):
-                        filepath = os.path.join(directoryAbsolutePath, filename)
-                        for message, context, position, comments in self.extractFromFile(filepath):
-                            yield message, context, filename + ":" + str(position), comments
+                        break
+                else:
+                    for filemask in self.includeMasks:
+                        if pathmatch(filemask, filename):
+                            filepath = os.path.join(directoryAbsolutePath, filename)
+                            for message, context, position, comments in self.extractFromFile(filepath):
+                                yield message, context, filename + ":" + str(position), comments
+
 
     def extractFromFile(self, filepath):
         """ Extracts messages from a specific file.
@@ -77,6 +90,7 @@ class Extractor(object):
         :rtype:     ``iterator``
         """
         pass
+
 
 
 class javascript(Extractor):
@@ -249,10 +263,12 @@ class javascript(Extractor):
                 yield messages, context, lineno, comments
 
 
+
 class cpp(javascript):
     """ Extract messages from C++ source code.
     """
     pass
+
 
 
 class txt(Extractor):
@@ -266,6 +282,7 @@ class txt(Extractor):
                 lineCount += 1
                 if line:
                     yield line, None, str(lineCount), []
+
 
 
 class json(Extractor):
@@ -360,6 +377,7 @@ class json(Extractor):
             del self.breadcrumbs[-1]
 
 
+
 class xml(Extractor):
     """ Extract messages from XML files.
     """
@@ -371,7 +389,7 @@ class xml(Extractor):
 
     def getJsonExtractor(self):
         if not self.jsonExtractor:
-            self.jsonExtractor = json(None, None, {})
+            self.jsonExtractor = json()
         return self.jsonExtractor
 
     def extractFromFile(self, filepath):
