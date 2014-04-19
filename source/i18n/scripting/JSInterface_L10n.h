@@ -19,6 +19,7 @@
 #define INCLUDED_JSINTERFACE_L10N
 
 #include "scriptinterface/ScriptInterface.h"
+#include "lib/external_libraries/icu.h"
 
 namespace JSI_L10n
 {
@@ -31,7 +32,7 @@ namespace JSI_L10n
 	std::wstring TranslatePluralWithContext(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string context, std::wstring singularSourceString, std::wstring pluralSourceString, int number);
 	std::wstring TranslateLines(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::wstring sourceString);
 	std::vector<std::wstring> TranslateArray(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::vector<std::wstring> sourceArray);
-	std::wstring FormatMillisecondsIntoDateString(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), int milliseconds, std::wstring formatString);
+	std::wstring FormatMillisecondsIntoDateString(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), UDate milliseconds, std::wstring formatString);
 	std::wstring FormatDecimalNumberIntoString(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), double number);
 	std::wstring MarkToTranslate(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::wstring sourceString);
 	std::vector<std::string> GetSupportedLocaleCodes(ScriptInterface::CxPrivate* UNUSED(pCxPrivate));

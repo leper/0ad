@@ -71,7 +71,7 @@ std::vector<std::wstring> JSI_L10n::TranslateArray(ScriptInterface::CxPrivate* U
 }
 
 // Return a localized version of a time given in milliseconds.
-std::wstring JSI_L10n::FormatMillisecondsIntoDateString(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), int milliseconds, std::wstring formatString)
+std::wstring JSI_L10n::FormatMillisecondsIntoDateString(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), UDate milliseconds, std::wstring formatString)
 {
 	return wstring_from_utf8(L10n::Instance().FormatMillisecondsIntoDateString(milliseconds, utf8_from_wstring(formatString)));
 }
@@ -123,7 +123,7 @@ void JSI_L10n::RegisterScriptFunctions(ScriptInterface& scriptInterface)
 	scriptInterface.RegisterFunction<std::wstring, std::string, std::wstring, std::wstring, int, &TranslatePluralWithContext>("TranslatePluralWithContext");
 	scriptInterface.RegisterFunction<std::wstring, std::wstring, &TranslateLines>("TranslateLines");
 	scriptInterface.RegisterFunction<std::vector<std::wstring>, std::vector<std::wstring>, &TranslateArray>("TranslateArray");
-	scriptInterface.RegisterFunction<std::wstring, int, std::wstring, &FormatMillisecondsIntoDateString>("FormatMillisecondsIntoDateString");
+	scriptInterface.RegisterFunction<std::wstring, UDate, std::wstring, &FormatMillisecondsIntoDateString>("FormatMillisecondsIntoDateString");
 	scriptInterface.RegisterFunction<std::wstring, double, &FormatDecimalNumberIntoString>("FormatDecimalNumberIntoString");
 	scriptInterface.RegisterFunction<std::wstring, std::wstring, &MarkToTranslate>("MarkToTranslate");
 	scriptInterface.RegisterFunction<std::vector<std::string>, &GetSupportedLocaleCodes>("GetSupportedLocaleCodes");

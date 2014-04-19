@@ -5,8 +5,7 @@ function sortDecreasingDate(a, b)
 
 function generateLabel(metadata, engineInfo)
 {
-	// TODO TODO TODO metadata.time is a unix timestamp (seconds)
-	var dateTimeString = Engine.FormatMillisecondsIntoDateString(metadata.time, translate("yyyy-MM-dd HH:mm:ss"));
+	var dateTimeString = Engine.FormatMillisecondsIntoDateString(metadata.time*1000, translate("yyyy-MM-dd HH:mm:ss"));
 	var dateString = sprintf(translate("[%(date)s]"), { date: dateTimeString });
 	if (engineInfo)
 	{

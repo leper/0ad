@@ -435,15 +435,6 @@ function hostGame()
 // Utils
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**
- * Add a leading zero to single-digit numbers.
- */
-// TODO TODO TODO check where this is used and why
-function twoDigits(n)
-{
-	return n < 10 ? "0" + n : n;
-}
-
 function stripColorCodes(input)
 {
 	return input.replace(/\[(\w+)[^w]*?](.*?)\[\/\1]/g, '$2');
@@ -758,7 +749,7 @@ function ircFormat(text, from, color, key)
 
 	// Build time header if enabled
 	if (g_timestamp)
-		var formatted = '[font="serif-bold-13"]\x5B' + twoDigits(time.getHours() % 12) + ":" + twoDigits(time.getMinutes()) + '\x5D[/font] '
+		var formatted = '[font="serif-bold-13"]\x5B' + Engine.FormatMillisecondsIntoDateString(time.getTime(), translate("HH:mm")) + '\x5D[/font] '
 	else
 		var formatted = "";
 

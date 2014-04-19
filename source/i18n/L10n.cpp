@@ -217,25 +217,25 @@ std::string L10n::LocalizeDateTime(const UDate& dateTime, DateTimeType type, Dat
 	return std::string(utf8Date, sink.NumberOfBytesWritten());
 }
 
-std::string L10n::FormatMillisecondsIntoDateString(int milliseconds, const std::string& formatString)
+std::string L10n::FormatMillisecondsIntoDateString(UDate milliseconds, const std::string& formatString)
 {
 	UErrorCode success = U_ZERO_ERROR;
 	UnicodeString utf16Date;
-	UnicodeString utf16SourceDateTimeFormat = UnicodeString::fromUTF8("A");
 	UnicodeString utf16LocalizedDateTimeFormat = UnicodeString::fromUTF8(formatString.c_str());
-	char buffer[32];
-	sprintf_s(buffer, ARRAY_SIZE(buffer), "%d", milliseconds);
-	UnicodeString utf16MillisecondsString = UnicodeString::fromUTF8(buffer);
+
+	// The format below should never reach the user, the one that matters is the
+	// one from the formatString parameter.
+	UnicodeString utf16SourceDateTimeFormat = UnicodeString::fromUTF8("No format specified (you should not be seeing this string!)");
 
 	SimpleDateFormat* dateFormatter = new SimpleDateFormat(utf16SourceDateTimeFormat, currentLocale, success);
-	UDate dateTime = dateFormatter->parse(utf16MillisecondsString, success);
 	dateFormatter->applyLocalizedPattern(utf16LocalizedDateTimeFormat, success);
-	dateFormatter->format(dateTime, utf16Date);
+	dateFormatter->format(milliseconds, utf16Date);
+	delete dateFormatter;
+
 	char utf8Date[512];
 	CheckedArrayByteSink sink(utf8Date, ARRAY_SIZE(utf8Date));
 	utf16Date.toUTF8(sink);
 	ENSURE(!sink.Overflowed());
-	delete dateFormatter;
 
 	return std::string(utf8Date, sink.NumberOfBytesWritten());
 }
