@@ -167,7 +167,7 @@ var sprintf = (function() {
 				parse_tree.push(match);
 			}
 			else {
-				throw(Engine.Translate('[sprintf] huh?'));
+				throw(sprintf(Engine.Translate('[sprintf] No placeholder found in the ‘%(formatString)s’ format string. Maybe you used an incorrect syntax for your placeholder?'), { formatString: _fmt } ));
 			}
 			_fmt = _fmt.substring(match[0].length);
 		}
