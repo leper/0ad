@@ -181,7 +181,7 @@ function attackRateDetails(entState) {
 		// TODO TODO TODO color, font
 		return sprintf(translate("%(arrowString)s / %(timeString)s"), {
 			arrowString: sprintf(translatePlural("%(arrows)s arrow", "%(arrows)s arrows", arrows), { arrows: arrows}),
-			timeString: sprintf(translatePlural("second", "%(time)s seconds", time), { time: time }) 
+			timeString: sprintf(translatePlural("%(time)s second", "%(time)s seconds", time), { time: time })
 		});
 	}
 	// TODO TODO TODO color, font
