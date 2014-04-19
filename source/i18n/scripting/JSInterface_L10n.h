@@ -25,20 +25,31 @@ namespace JSI_L10n
 {
 	void RegisterScriptFunctions(ScriptInterface& ScriptInterface);
 
-	std::string GetCurrentLocale(ScriptInterface::CxPrivate* UNUSED(pCxPrivate));
 	std::wstring Translate(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::wstring sourceString);
 	std::wstring TranslateWithContext(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string context, std::wstring sourceString);
 	std::wstring TranslatePlural(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::wstring singularSourceString, std::wstring pluralSourceString, int number);
 	std::wstring TranslatePluralWithContext(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string context, std::wstring singularSourceString, std::wstring pluralSourceString, int number);
 	std::wstring TranslateLines(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::wstring sourceString);
 	std::vector<std::wstring> TranslateArray(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::vector<std::wstring> sourceArray);
+	std::wstring MarkToTranslate(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::wstring sourceString);
 	std::wstring FormatMillisecondsIntoDateString(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), UDate milliseconds, std::wstring formatString);
 	std::wstring FormatDecimalNumberIntoString(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), double number);
-	std::wstring MarkToTranslate(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::wstring sourceString);
-	std::vector<std::string> GetSupportedLocaleCodes(ScriptInterface::CxPrivate* UNUSED(pCxPrivate));
+
+	std::vector<std::string> GetSupportedLocaleBaseNames(ScriptInterface::CxPrivate* UNUSED(pCxPrivate));
 	std::vector<std::wstring> GetSupportedLocaleDisplayNames(ScriptInterface::CxPrivate* UNUSED(pCxPrivate));
-	int GetCurrentLocaleIndex(ScriptInterface::CxPrivate* UNUSED(pCxPrivate));
-	void SetLocale(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string locale);
+	std::string GetCurrentLocale(ScriptInterface::CxPrivate* UNUSED(pCxPrivate));
+	std::vector<std::string> GetAllLocales(ScriptInterface::CxPrivate* UNUSED(pCxPrivate));
+	std::string GetDictionaryLocale(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string configLocale);
+	std::vector<std::wstring> GetDictionariesForDictLocale(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string locale);
+
+	std::string GetLocaleLanguage(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string locale);
+	std::string GetLocaleBaseName(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string locale);
+	std::string GetLocaleCountry(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string locale);
+	std::string GetLocaleScript(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string locale);
+
+	bool ValidateLocale(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string locale);
+	bool SaveLocale(ScriptInterface::CxPrivate* UNUSED(pCxPrivate), std::string locale);
+	void ReevaluateCurrentLocaleAndReload(ScriptInterface::CxPrivate* UNUSED(pCxPrivate));
 }
 
 #endif

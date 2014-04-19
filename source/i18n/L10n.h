@@ -45,11 +45,22 @@ public:
 	static L10n& Instance();
 
 	Locale GetCurrentLocale();
-	void SetCurrentLocale(const std::string& localeCode);
-	void SetCurrentLocale(Locale locale);
-	std::vector<std::string> GetSupportedLocaleCodes();
+	std::vector<std::string> GetAllLocales();
+	bool SaveLocale(const std::string& localeCode);
+	bool SaveLocale(Locale locale);
+	std::vector<std::string> GetSupportedLocaleBaseNames();
 	std::vector<std::wstring> GetSupportedLocaleDisplayNames();
-	int GetCurrentLocaleIndex();
+	std::string GetCurrentLocaleString();
+	std::string GetLocaleLanguage(const std::string& locale);
+	std::string GetLocaleBaseName(const std::string& locale);
+	std::string GetLocaleCountry(const std::string& locale);
+	std::string GetLocaleScript(const std::string& locale);
+	std::vector<std::wstring> GetDictionariesForDictLocale(const std::string& locale);
+	std::string GetDictionaryLocale(std::string configLocaleString);
+	void GetDictionaryLocale(std::string configLocaleString, Locale& outLocale);
+	void ReevaluateCurrentLocaleAndReload();
+	bool ValidateLocale(Locale locale);
+	bool ValidateLocale(const std::string& localeCode);
 
 	std::string Translate(const std::string& sourceString);
 	std::string TranslateWithContext(const std::string& context, const std::string& sourceString);
@@ -72,7 +83,7 @@ private:
 	std::vector<Locale*> availableLocales;
 	bool currentLocaleIsOriginalGameLocale;
 
-	Locale GetConfiguredOrSystemLocale();
+	Locale AutoDetectLocale();
 	void LoadDictionaryForCurrentLocale();
 	void LoadListOfAvailableLocales();
 

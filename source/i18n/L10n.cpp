@@ -46,11 +46,13 @@ L10n::L10n()
 	: currentLocaleIsOriginalGameLocale(false), dictionary(new tinygettext::Dictionary())
 {
 	LoadListOfAvailableLocales();
-	SetCurrentLocale(GetConfiguredOrSystemLocale());
+	ReevaluateCurrentLocaleAndReload();
 }
 
 L10n::~L10n()
 {
+	for (std::vector<Locale*>::iterator iterator = availableLocales.begin(); iterator != availableLocales.end(); ++iterator)
+		delete *iterator;
 	delete dictionary;
 }
 
@@ -59,21 +61,143 @@ Locale L10n::GetCurrentLocale()
 	return currentLocale;
 }
 
-void L10n::SetCurrentLocale(const std::string& localeCode)
+bool L10n::SaveLocale(const std::string& localeCode)
 {
-	SetCurrentLocale(Locale(Locale::createCanonical(localeCode.c_str())));
+	return SaveLocale(Locale(Locale::createCanonical(localeCode.c_str())));
 }
 
-void L10n::SetCurrentLocale(Locale locale)
+bool L10n::SaveLocale(Locale locale)
+{	
+	// TODO: Use the ConfigDB functions exposed to js to change the config value
+	// Save the new locale in the settings file.
+	if (!ValidateLocale(locale))
+		return false;
+
+	g_ConfigDB.SetValueString(CFG_USER, "locale", locale.getName());
+	g_ConfigDB.WriteFile(CFG_USER);
+	return true;
+}
+
+bool L10n::ValidateLocale(const std::string& localeCode)
 {
-	bool reload = (currentLocale != locale) == TRUE;
-	currentLocale = locale;
+	return ValidateLocale(Locale::createCanonical(localeCode.c_str()));
+}
+
+// Returns true if both of these conditions are true:
+//  1. ICU has resources for that locale (which also ensures it's a valid locale string) 
+//  2. Either a dictionary for language_country or for language is available.
+bool L10n::ValidateLocale(Locale locale)
+{
+	int32_t count;
+	bool icuSupported = false;
+	const Locale* icuSupportedLocales = Locale::getAvailableLocales(count);
+	for (int i=0; i<count; ++i)
+	{
+		if (icuSupportedLocales[i] == locale)
+		{
+			icuSupported = true;
+			break;
+		}
+	}
+	if(!icuSupported)
+		return false;
+	
+	for (std::vector<Locale*>::iterator iterator = availableLocales.begin(); iterator != availableLocales.end(); ++iterator)
+	{
+		if ((strcmp((*iterator)->getLanguage(), locale.getLanguage()) == 0 && strcmp((*iterator)->getCountry(), "") == 0) ||
+			(strcmp((*iterator)->getLanguage(), locale.getLanguage()) == 0 && strcmp((*iterator)->getCountry(), locale.getCountry()) == 0))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+std::vector<std::wstring> L10n::GetDictionariesForDictLocale(const std::string& locale)
+{
+	std::wstring tmpLocale(locale.begin(), locale.end());
+	std::vector<std::wstring> ret;
+	VfsPaths filenames;
+	if (vfs::GetPathnames(g_VFS, L"l10n/",  tmpLocale.append(L".*.po").c_str(), filenames) < 0)
+		return ret;
+
+	if (filenames.size() == 0)
+	{
+		Locale tmpLocale1 = Locale::createCanonical(locale.c_str());
+		if (vfs::GetPathnames(g_VFS, L"l10n/", wstring_from_utf8(tmpLocale1.getLanguage()).append(L".*.po").c_str(), filenames) < 0)
+			return ret;
+	}
+
+	for (VfsPaths::iterator it = filenames.begin(); it != filenames.end(); ++it)
+	{
+		VfsPath filepath = *it;
+		ret.push_back(filepath.Filename().string());
+	}
+	return ret;
+}
+
+std::string L10n::GetDictionaryLocale(std::string configLocaleString)
+{
+	Locale out;
+	GetDictionaryLocale(configLocaleString, out);
+	return out.getName();
+}
+
+// First, try to get a valid locale from the config, then check if the system locale can be used and otherwise fall back to en_US.
+void L10n::GetDictionaryLocale(std::string configLocaleString, Locale& outLocale)
+{
+	bool validConfigLocale = false;
+	if (!configLocaleString.empty())
+	{
+		Locale configLocale = Locale::createCanonical(configLocaleString.c_str());
+		if (ValidateLocale(configLocale))
+		{
+			outLocale = configLocale;
+			validConfigLocale = true;
+		}
+		else
+			LOGWARNING(L"The configured locale is not valid or no translations are available. Falling back to another locale.");
+	}
+	
+	if (!validConfigLocale)
+	{
+		Locale systemLocale = Locale::getDefault();
+		if (ValidateLocale(systemLocale))
+		{
+			outLocale = systemLocale;
+		}
+		else
+		{
+			outLocale = Locale::getUS();
+		}
+	}
+}
+
+
+// Try to find the best disctionary locale based on user configuration and system locale, set the currentLocale and reload the dictionary.
+void L10n::ReevaluateCurrentLocaleAndReload()
+{
+	std::string locale;
+	CFG_GET_VAL("locale", String, locale);
+	
+	GetDictionaryLocale(locale, currentLocale);
 	currentLocaleIsOriginalGameLocale = (currentLocale == Locale::getUS()) == TRUE;
-	if (reload && !currentLocaleIsOriginalGameLocale)
-		LoadDictionaryForCurrentLocale();
+	LoadDictionaryForCurrentLocale();
 }
 
-std::vector<std::string> L10n::GetSupportedLocaleCodes()
+// Get all locales supported by ICU.
+std::vector<std::string> L10n::GetAllLocales()
+{
+	std::vector<std::string> ret;
+	int32_t count;
+	const Locale* icuSupportedLocales = Locale::getAvailableLocales(count);
+	for (int i=0; i<count; ++i)
+		ret.push_back(icuSupportedLocales[i].getName());
+	return ret;
+}
+
+
+std::vector<std::string> L10n::GetSupportedLocaleBaseNames()
 {
 	std::vector<std::string> supportedLocaleCodes;
 	for (std::vector<Locale*>::iterator iterator = availableLocales.begin(); iterator != availableLocales.end(); ++iterator)
@@ -109,32 +233,33 @@ std::vector<std::wstring> L10n::GetSupportedLocaleDisplayNames()
 	return supportedLocaleDisplayNames;
 }
 
-int L10n::GetCurrentLocaleIndex()
+std::string L10n::GetCurrentLocaleString()
 {
-	int languageCodeOnly = -1;
-	int defaultLocale = -1;
+	return currentLocale.getName();
+}
 
-	// Check for an exact match (whole code) first, then for the same language and at last for the default locale en_US
-	for (std::vector<Locale*>::iterator iterator = availableLocales.begin(); iterator != availableLocales.end(); ++iterator)
-	{
-		if (strcmp((**iterator).getBaseName(), GetCurrentLocale().getBaseName()) == 0)
-			return iterator - availableLocales.begin();
+std::string L10n::GetLocaleLanguage(const std::string& locale)
+{
+	Locale loc = Locale::createCanonical(locale.c_str());
+	return loc.getLanguage();
+}
 
-		if (languageCodeOnly < 0 && strcmp((**iterator).getLanguage(), GetCurrentLocale().getLanguage()) == 0)
-			languageCodeOnly = iterator - availableLocales.begin();
+std::string L10n::GetLocaleBaseName(const std::string& locale)
+{
+	Locale loc = Locale::createCanonical(locale.c_str());
+	return loc.getBaseName();
+}
 
-		if (defaultLocale < 0 && strcmp((**iterator).getLanguage(), Locale::getUS().getLanguage()) == 0)
-			defaultLocale = iterator - availableLocales.begin();
-	}
+std::string L10n::GetLocaleCountry(const std::string& locale)
+{
+	Locale loc = Locale::createCanonical(locale.c_str());
+	return loc.getCountry();
+}
 
-	if (languageCodeOnly >= 0)
-		return languageCodeOnly;
-	
-	if (defaultLocale >= 0)
-		return defaultLocale;
-
-	debug_warn(L"Current locale, one with the same language, and the default language (en_US) not found in the available locales.");
-	return 0;
+std::string L10n::GetLocaleScript(const std::string& locale)
+{
+	Locale loc = Locale::createCanonical(locale.c_str());
+	return loc.getScript();
 }
 
 std::string L10n::Translate(const std::string& sourceString)
@@ -265,24 +390,21 @@ VfsPath L10n::LocalizePath(VfsPath sourcePath)
 	return path;
 }
 
-Locale L10n::GetConfiguredOrSystemLocale()
-{
-	std::string locale;
-	CFG_GET_VAL("locale", String, locale);
-	if (!locale.empty())
-		return Locale(Locale::createCanonical(locale.c_str()));
-	else
-		return Locale::getDefault();
-}
-
 void L10n::LoadDictionaryForCurrentLocale()
 {
 	delete dictionary;
 	dictionary = new tinygettext::Dictionary();
 
 	VfsPaths filenames;
-	if (vfs::GetPathnames(g_VFS, L"l10n/", (wstring_from_utf8(currentLocale.getLanguage()) + L".*.po").c_str(), filenames) < 0)
+	if (vfs::GetPathnames(g_VFS, L"l10n/", (wstring_from_utf8(currentLocale.getBaseName()) + L".*.po").c_str(), filenames) < 0)
 		return;
+	
+	// If not matching country is found, try to fall back to a matching language	
+	if (filenames.size() == 0)
+	{
+		if (vfs::GetPathnames(g_VFS, L"l10n/", (wstring_from_utf8(currentLocale.getLanguage()) + L".*.po").c_str(), filenames) < 0)
+			return;
+	}
 
 	for (VfsPaths::iterator it = filenames.begin(); it != filenames.end(); ++it)
 	{
@@ -329,6 +451,8 @@ void L10n::LoadListOfAvailableLocales()
 
 		if (!localeIsAlreadyAvailable)
 			availableLocales.push_back(locale);
+		else 
+			delete locale;
 	}
 }
 
