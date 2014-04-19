@@ -737,21 +737,11 @@ function ircSplit(string)
  */
 function ircFormat(text, from, color, key)
 {
-	// TODO TODO TODO
 	// Generate and apply color to uncolored names,
 	if (!color && from)
 		var coloredFrom = colorPlayerName(from);
 	else if (color && from)
 		var coloredFrom = '[color="' + color + '"]' + from + "[/color]";
-
-	// Time for optional time header
-	var time = new Date(Date.now());
-
-	// Build time header if enabled
-	if (g_timestamp)
-		var formatted = '[font="serif-bold-13"]\x5B' + Engine.FormatMillisecondsIntoDateString(time.getTime(), translate("HH:mm")) + '\x5D[/font] '
-	else
-		var formatted = "";
 
 	// Handle commands allowed past handleSpecialCommand.
 	if (text[0] == '/')
@@ -760,19 +750,61 @@ function ircFormat(text, from, color, key)
 		switch (command)
 		{
 			case "me":
-				return formatted + '[font="serif-bold-13"]* ' + coloredFrom + '[/font] ' + message;
+				// Translation: IRC message prefix when the sender uses the /me command.
+				var senderString = '[font="serif-bold-13"]' + sprintf(translate("* %(sender)s"), { sender: coloredFrom }) + '[/font]';
+				// Translation: IRC message issued using the ‘/me’ command.
+				var formattedMessage = sprintf(translate("%(sender)s %(action)s"), { sender: senderString, action: message });
+				break;
 			case "say":
-				return formatted + '[font="serif-bold-13"]<' + coloredFrom + '>[/font] ' + message;
+				// Translation: IRC message prefix.
+				var senderString = '[font="serif-bold-13"]' + sprintf(translate("<%(sender)s>"), { sender: coloredFrom }) + '[/font]';
+				// Translation: IRC message.
+				var formattedMessage = sprintf(translate("%(sender)s %(message)s"), { sender: senderString, message: message });
+				break
 			case "special":
 				if (key === g_specialKey)
-					return formatted + '[font="serif-bold-13"] == ' + message + '[/font]';
+					// Translation: IRC system message.
+					var formattedMessage = '[font="serif-bold-13"]' + sprintf(translate("== %(message)s"), { message: message }) + '[/font]';
+				else
+				{
+					// Translation: IRC message prefix.
+					var senderString = '[font="serif-bold-13"]' + sprintf(translate("<%(sender)s>"), { sender: coloredFrom }) + '[/font]';
+					// Translation: IRC message.
+					var formattedMessage = sprintf(translate("%(sender)s %(message)s"), { sender: senderString, message: message });
+				}
 				break;
 			default:
 				// This should never happen.
-				return "";
+				var formattedMessage = "";
 		}
 	}
-	return formatted + '[font="serif-bold-13"]<' + coloredFrom + '>[/font] ' + text;
+	else
+	{
+		// Translation: IRC message prefix.
+		var senderString = '[font="serif-bold-13"]' + sprintf(translate("<%(sender)s>"), { sender: coloredFrom }) + '[/font]';
+		// Translation: IRC message.
+		var formattedMessage = sprintf(translate("%(sender)s %(message)s"), { sender: senderString, message: text });
+	}
+
+	// Build time header if enabled
+	if (g_timestamp)
+	{
+		// Time for optional time header
+		var time = new Date(Date.now());
+
+		// Translation: Time as shown in the multiplayer lobby (when you enable it in the options page).
+		// For a list of symbols that you can use, see:
+		// https://sites.google.com/site/icuprojectuserguide/formatparse/datetime?pli=1#TOC-Date-Field-Symbol-Table
+		var timeString = Engine.FormatMillisecondsIntoDateString(time.getTime(), translate("HH:mm"));
+
+		// Translation: Time prefix as shown in the multiplayer lobby (when you enable it in the options page).
+		var timePrefixString = '[font="serif-bold-13"]' + sprintf(translate("[%(time)s]"), { time: timeString }) + '[/font]';
+
+		// Translation: IRC message format when there is a time prefix.
+		return sprintf(translate("%(time)s %(message)s"), { time: timePrefixString, message: formattedMessage });
+	}
+	else
+		return formattedMessage;
 }
 
 /**
