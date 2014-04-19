@@ -127,6 +127,7 @@ bool COList::HandleAdditionalChildren(const XMBElement& child, CXeromyces* pFile
 	ELMT(item);
 	ELMT(heading);
 	ELMT(def);
+	ELMT(translatableAttribute);
 	ATTR(id);
 
 	if (child.GetNodeName() == elmt_item)
