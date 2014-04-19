@@ -249,7 +249,7 @@ BuildRestrictions.prototype.CheckPlacement = function()
 			var nearEnts = cmpRangeManager.ExecuteQuery(this.entity, 0, dist, [cmpPlayer.GetPlayerID()], IID_BuildRestrictions).filter(filter);
 			if (nearEnts.length)
 			{
-				result.reason = translate("%(name)s too close to a %(category)s, must be at least %(distance)s meters away");
+				result.message = markForTranslation("%(name)s too close to a %(category)s, must be at least %(distance)s meters away");
 				result.parameters.category = cat;
 				result.parameters.distance = this.template.Distance.MinDistance;
 				return result;	// Fail
@@ -261,7 +261,7 @@ BuildRestrictions.prototype.CheckPlacement = function()
 			var nearEnts = cmpRangeManager.ExecuteQuery(this.entity, 0, dist, [cmpPlayer.GetPlayerID()], IID_BuildRestrictions).filter(filter);
 			if (!nearEnts.length)
 			{
-				result.reason = markForTranslation("%(name)s too far from a %(category)s, must be within %(distance)s meters");
+				result.message = markForTranslation("%(name)s too far from a %(category)s, must be within %(distance)s meters");
 				result.parameters.category = cat;
 				result.parameters.distance = this.template.Distance.MinDistance;
 				return result;	// Fail
