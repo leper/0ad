@@ -44,7 +44,7 @@ except:
 
 class Extractor(object):
 
-    def __init__(self, directoryPath=None, filemasks=[], options={}):
+    def __init__(self, directoryPath, filemasks, options):
 
         self.directoryPath = directoryPath
         self.options = options
@@ -289,7 +289,7 @@ class json(Extractor):
     """ Extract messages from JSON files.
     """
 
-    def __init__(self, directoryPath, filemasks, options):
+    def __init__(self, directoryPath=None, filemasks=[], options={}):
         super(json, self).__init__(directoryPath, filemasks, options)
         self.breadcrumbs = []
         self.keywords = self.options.get("keywords", {})
