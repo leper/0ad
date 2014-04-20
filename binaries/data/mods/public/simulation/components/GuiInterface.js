@@ -855,7 +855,7 @@ GuiInterface.prototype.GetFormationInfoFromTemplate = function(player, data)
 	if (!template || !template.Formation)
 		return r;
 	r.name = template.Formation.FormationName;
-	r.tooltip = template.Formation.DisabledTooltip;
+	r.tooltip = template.Formation.DisabledTooltip || "";
 	return r;
 };
 
