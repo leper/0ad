@@ -478,43 +478,124 @@ function openTrade()
 	var traderNumber = Engine.GuiInterfaceCall("GetTraderNumber");
 	var caption = "";
 	if (traderNumber.landTrader.total == 0)
-		caption = "0";
+		caption = translate("There are no land traders.");
 	else
 	{
-		if (traderNumber.landTrader.trading > 0)
-			caption += sprintf(translate("%(numTrading)s trading"), { numTrading: traderNumber.landTrader.trading });
-		if (traderNumber.landTrader.garrisoned > 0)
-		{
-			if (traderNumber.landTrader.trading > 0)
-				caption += sprintf(translate(", %(numGarrisoned)s garrisoned inside ships"), { numGarrisoned: traderNumber.landTrader.garrisoned });
-			else
-				caption += sprintf(translate("%(numGarrisoned)s garrisoned inside ships"), { numGarrisoned: traderNumber.landTrader.garrisoned });
-		}
 		var inactive = traderNumber.landTrader.total - traderNumber.landTrader.trading - traderNumber.landTrader.garrisoned;
+		var inactiveString = "";
 		if (inactive > 0)
+			inactiveString = "[color=\"orange\"]" + sprintf(translatePlural("%(numberOfLandTraders)s inactive", "%(numberOfLandTraders)s inactive", inactive), { numberOfLandTraders: inactive }) + "[/color]";
+
+		if (traderNumber.landTrader.trading > 0)
 		{
-			if (traderNumber.landTrader.trading > 0 || traderNumber.landTrader.garrisoned > 0)
-				caption += sprintf(translate(", [color=\"orange\"]%(numInactive)s inactive[/color]"), { numInactive: inactive });
+			var openingTradingString = sprintf(translatePlural("There is %(numberTrading)s land trader trading", "There are %(numberTrading)s land traders trading", traderNumber.landTrader.trading), { numberTrading: traderNumber.landTrader.trading });
+			if (traderNumber.landTrader.garrisoned > 0)
+			{
+				var garrisonedString = sprintf(translatePlural("%(numberGarrisoned)s garrisoned on a trading merchant ship", "%(numberGarrisoned)s garrisoned on a trading merchant ship", traderNumber.landTrader.garrisoned), { numberGarrisoned: traderNumber.landTrader.garrisoned });
+				if (inactive > 0)
+				{
+					caption = sprintf(translate("%(openingTradingString)s, %(garrisonedString)s, and %(inactiveString)s."), {
+						openingTradingString: openingTradingString,
+						garrisonedString: garrisonedString,
+						inactiveString: inactiveString
+					});
+				}
+				else
+				{
+					caption = sprintf(translate("%(openingTradingString)s, and %(garrisonedString)s."), {
+						openingTradingString: openingTradingString,
+						garrisonedString: garrisonedString
+					});
+				}
+			}
 			else
-				caption += sprintf(translate("[color=\"orange\"]%(numInactive)s inactive[/color]"), { numIncatvie: inactive });
+			{
+				if (inactive > 0)
+				{
+					caption = sprintf(translate("%(openingTradingString)s, and %(inactiveString)s."), {
+						openingTradingString: openingTradingString,
+						inactiveString: inactiveString
+					});
+				}
+				else
+				{
+					caption = sprintf(translate("%(openingTradingString)s."), {
+						openingTradingString: openingTradingString,
+					});
+				}
+			}
+		}
+		else
+		{
+			if (traderNumber.landTrader.garrisoned > 0)
+			{
+				var openingGarrisonedString = sprintf(translatePlural("There is %(numberGarrisoned)s land trader garrisoned on a trading merchant ship", "There are %(numberGarrisoned)s land traders garrisoned on a trading merchant ship", traderNumber.landTrader.garrisoned), { numberGarrisoned: traderNumber.landTrader.garrisoned });
+				if (inactive > 0)
+				{
+					caption = sprintf(translate("%(openingGarrisonedString)s, and %(inactiveString)s."), {
+						openingGarrisonedString: openingGarrisonedString,
+						inactiveString: inactiveString
+					});
+				}
+				else
+				{
+					caption = sprintf(translate("%(openingGarrisonedString)s."), {
+						openingGarrisonedString: openingGarrisonedString
+					});
+				}
+			}
+			else
+			{
+				if (inactive > 0)
+				{
+					inactiveString = "[color=\"orange\"]" + sprintf(translatePlural("%(numberOfLandTraders)s land trader inactive", "%(numberOfLandTraders)s land traders inactive", inactive), { numberOfLandTraders: inactive }) + "[/color]";
+					caption = sprintf(translatePlural("There is %(inactiveString)s.", "There are %(inactiveString)s.", inactive), {
+						inactiveString: inactiveString
+					});
+				}
+				// The “else” here is already handled by “if (traderNumber.landTrader.total == 0)” above.
+			}
 		}
 	}
 	Engine.GetGUIObjectByName("landTraders").caption = caption;
 
 	caption = "";
 	if (traderNumber.shipTrader.total == 0)
-		caption = "0";
+		caption = translate("There are no merchant ships.");
 	else
 	{
-		if (traderNumber.shipTrader.trading > 0)
-			caption += sprintf(translate("%(numTrading)s trading"), { numTrading: traderNumber.shipTrader.trading });
 		var inactive = traderNumber.shipTrader.total - traderNumber.shipTrader.trading;
+		var inactiveString = "";
 		if (inactive > 0)
+			inactiveString = "[color=\"orange\"]" + sprintf(translatePlural("%(numberOfShipTraders)s inactive", "%(numberOfShipTraders)s inactive", inactive), { numberOfShipTraders: inactive }) + "[/color]";
+
+		if (traderNumber.shipTrader.trading > 0)
 		{
-			if (traderNumber.shipTrader.trading > 0)
-				caption += sprintf(translate(", [color=\"orange\"]%(numInactive)s inactive[/color]"), { numInactive: inactive });
+			var openingTradingString = sprintf(translatePlural("There is %(numberTrading)s merchant ship trading", "There are %(numberTrading)s merchant ships trading", traderNumber.shipTrader.trading), { numberTrading: traderNumber.shipTrader.trading });
+			if (inactive > 0)
+			{
+				caption = sprintf(translate("%(openingTradingString)s, and %(inactiveString)s."), {
+					openingTradingString: openingTradingString,
+					inactiveString: inactiveString
+				});
+			}
 			else
-				caption += sprintf(translate("[color=\"orange\"]%(numInactive)s inactive[/color]"), { numInactive: inactive });
+			{
+				caption = sprintf(translate("%(openingTradingString)s."), {
+					openingTradingString: openingTradingString,
+				});
+			}
+		}
+		else
+		{
+			if (inactive > 0)
+			{
+				inactiveString = "[color=\"orange\"]" + sprintf(translatePlural("%(numberOfShipTraders)s merchant ship inactive", "%(numberOfShipTraders)s merchant ships inactive", inactive), { numberOfShipTraders: inactive }) + "[/color]";
+				caption = sprintf(translatePlural("There is %(inactiveString)s.", "There are %(inactiveString)s.", inactive), {
+					inactiveString: inactiveString
+				});
+			}
+			// The “else” here is already handled by “if (traderNumber.shipTrader.total == 0)” above.
 		}
 	}
 	Engine.GetGUIObjectByName("shipTraders").caption = caption;
