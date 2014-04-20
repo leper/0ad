@@ -176,12 +176,16 @@ BuildRestrictions.prototype.CheckPlacement = function()
 	var territoryFail = true;
 	var territoryType = "";
 	if (isAlly && !this.HasTerritory("ally"))
+		// Translation: territoryType being displayed in a translated sentence in the form: "House cannot be built in %(territoryType)s territory.".
 		territoryType = markForTranslationWithContext("Territory type", "ally");
 	else if (isOwn && !this.HasTerritory("own"))
+		// Translation: territoryType being displayed in a translated sentence in the form: "House cannot be built in %(territoryType)s territory.".
 		territoryType = markForTranslationWithContext("Territory type", "own");
 	else if (isNeutral && !this.HasTerritory("neutral"))
+		// Translation: territoryType being displayed in a translated sentence in the form: "House cannot be built in %(territoryType)s territory.".
 		territoryType = markForTranslationWithContext("Territory type", "neutral");
 	else if (isEnemy && !this.HasTerritory("enemy"))
+		// Translation: territoryType being displayed in a translated sentence in the form: "House cannot be built in %(territoryType)s territory.".
 		territoryType = markForTranslationWithContext("Territory type", "enemy");
 	else
 		territoryFail = false;
@@ -191,7 +195,7 @@ BuildRestrictions.prototype.CheckPlacement = function()
 		result.message = markForTranslation("%(name)s cannot be built in %(territoryType)s territory. Valid territories: %(validTerritories)s");
 		result.parameters.territoryType = {"context": "Territory type", "message": territoryType};
 		// gui code will join this array to a string
-		result.parameters.validTerritories = {"context": "Territory type", "list": this.GetTerritories()};
+		result.parameters.validTerritories = {"context": "Territory type list", "list": this.GetTerritories()};
 		return result;	// Fail
 	}
 
@@ -289,5 +293,14 @@ BuildRestrictions.prototype.HasTerritory = function(territory)
 {
 	return (this.GetTerritories().indexOf(territory) != -1);
 };
+
+// Translation: Territory types being displayed as part of a list like "Valid territories: own, ally".
+markForTranslationWithContext("Territory type list", "own");
+// Translation: Territory types being displayed as part of a list like "Valid territories: own, ally".
+markForTranslationWithContext("Territory type list", "ally");
+// Translation: Territory types being displayed as part of a list like "Valid territories: own, ally".
+markForTranslationWithContext("Territory type list", "neutral");
+// Translation: Territory types being displayed as part of a list like "Valid territories: own, ally".
+markForTranslationWithContext("Territory type list", "enemy");
 
 Engine.RegisterComponentType(IID_BuildRestrictions, "BuildRestrictions", BuildRestrictions);
