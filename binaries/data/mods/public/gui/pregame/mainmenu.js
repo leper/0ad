@@ -120,14 +120,14 @@ function formatUserReportStatus(status)
 		if (httpCode == 200)
 			return translate("upload succeeded");
 		else
-			return sprintf(translate("upload failed (%{errorCode}s)"), { errorCode: httpCode });
+			return sprintf(translate("upload failed (%(errorCode)s)"), { errorCode: httpCode });
 	}
 
 	if (d[0] == "failed")
 	{
 		var errCode = d[1];
 		var errMessage = d[2];
-		return sprintf(translate("upload failed (%{errorMessage}s)"), { errorMessage: errMessage });
+		return sprintf(translate("upload failed (%(errorMessage)s)"), { errorMessage: errMessage });
 	}
 
 	return translate("unknown");
@@ -173,8 +173,12 @@ function ShowRenderPathMessage()
 			600,
 			300,
 			"[font=\"serif-bold-16\"]" +
-			sprintf(translate("%{startWarning}sWarning:%{endWarning}s You appear to be using non-shader (fixed function) graphics. This option will be removed in a future 0 A.D. release, to allow for more advanced graphics features. We advise upgrading your graphics card to a more recent, shader-compatible model."), { startWarning: "[color=\"200 20 20\"]", endWarning: "[/color]"}) +
+			sprintf(translate("%(startWarning)sWarning:%(endWarning)s You appear to be using non-shader (fixed function) graphics. This option will be removed in a future 0 A.D. release, to allow for more advanced graphics features. We advise upgrading your graphics card to a more recent, shader-compatible model."), { startWarning: "[color=\"200 20 20\"]", endWarning: "[/color]"}) +
 			"\n\n" +
+			// Translation: This is the second paragraph of a warning. The
+			// warning explains that the user is using “non-shader“ graphics,
+			// and that in the future this will not be supported by the game, so
+			// the user will need a better graphics card.
 			translate("Please press \"Read More\" for more information or \"OK\" to continue."),
 			translate("WARNING!"),
 			0,
