@@ -15,7 +15,7 @@ var options = {
 		[translate("Particles"), translate("Enable particles"), {"renderer":"Particles"}, "boolean"],
 		[translate("Show Sky"), translate("Render Sky"), {"renderer":"ShowSky"}, "boolean"],
 		[translate("Unit Silhouettes"), translate("Show outlines of units behind buildings"), {"renderer":"Silhouettes"}, "boolean"],
-		[translate("Shadow Flitering"), translate("Smooth shadows"), {"renderer":"ShadowPCF"}, "boolean"],
+		[translate("Shadow Filtering"), translate("Smooth shadows"), {"renderer":"ShadowPCF"}, "boolean"],
 		[translate("HQ Waviness"), translate("Use real normals for ocean-wave rendering, instead of applying them as a flat texture"), {"renderer":"WaterNormal"}, "boolean"],
 		[translate("Real Water Depth"), translate("Use actual water depth in rendering calculations"), {"renderer":"WaterRealDepth"}, "boolean"],
 		[translate("Water Reflections"), translate("Allow water to reflect a mirror image"), {"renderer":"WaterReflection"}, "boolean"],
