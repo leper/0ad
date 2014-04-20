@@ -524,9 +524,7 @@
 					</object>
 				</repeat>
 				<object name="tradeHelp" size="100%-24 4 100% 28" enabled="false" type="button" style="StoneButton" tooltip_style="sessionToolTipBold">
-					<translatableAttribute id="tooltip">
-						Select one goods as origin of the changes, \nthen use the arrows of the target goods to make the changes.
-					</translatableAttribute>
+					<translatableAttribute id="tooltip">Select one goods as origin of the changes,\nthen use the arrows of the target goods to make the changes.</translatableAttribute>
 					<object size="20% 15% 80% 75%" type="image" ghost="true" sprite="iconInfoWhite"/>
 				</object>
 			</object>
@@ -825,13 +823,13 @@
 		size="100%-194 4 100%-166 32"
 		style="iconButton"
 		tooltip_style="sessionToolTip"
-		tooltip="Trade"
 	    >
-		<!-- TODO make the button less ugly -->
-		<object size="0 0 100% 100%" name="tradeButtonImage" type="image" sprite="stretched:session/icons/economics.png" ghost="true"/>
-		<action on="Press">
-		    toggleTrade();
-		</action>
+			<!-- TODO make the button less ugly -->
+			<object size="0 0 100% 100%" name="tradeButtonImage" type="image" sprite="stretched:session/icons/economics.png" ghost="true"/>
+			<translatableAttribute id="tooltip">Trade</translatableAttribute>
+			<action on="Press">
+				toggleTrade();
+			</action>
 	    </object>
 
 	    <!-- ================================  ================================ -->
