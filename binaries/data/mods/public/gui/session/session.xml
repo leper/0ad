@@ -497,11 +497,15 @@
 		hidden="true"
 		sprite="ModernDialog"
 	>
-		<object type="text" style="TitleText" size="50%-96 -16 50%+96 16">Trade</object>
+		<object type="text" style="TitleText" size="50%-96 -16 50%+96 16">
+			<translatableAttribute id="caption">Trade</translatableAttribute>
+		</object>
 
 		<!-- Trading goods -->
 		<object name="tradeGoods" size="20 50 100%-20 82">
-			<object name="tradeHeader" size="0 0 180 100%" type="text" style="ModernLabelText" text_align="left" ghost="true" caption="Trading goods selection:"/>
+			<object name="tradeHeader" size="0 0 180 100%" type="text" style="ModernLabelText" text_align="left" ghost="true">
+				<translatableAttribute id="caption">Trading goods selection:</translatableAttribute>
+			</object>
 
 			<object size="180 0 100% 100%">
 				<repeat count="4">
@@ -519,21 +523,28 @@
 						</object>
 					</object>
 				</repeat>
-				<object name="tradeHelp" size="100%-24 4 100% 28" enabled="false" type="button" style="StoneButton" tooltip_style="sessionToolTipBold" tooltip="Select one goods as origin of the changes, \nthen use the arrows of the target goods to make the changes.">
+				<object name="tradeHelp" size="100%-24 4 100% 28" enabled="false" type="button" style="StoneButton" tooltip_style="sessionToolTipBold">
+					<translatableAttribute id="tooltip">
+						Select one goods as origin of the changes, \nthen use the arrows of the target goods to make the changes.
+					</translatableAttribute>
 					<object size="20% 15% 80% 75%" type="image" ghost="true" sprite="iconInfoWhite"/>
 				</object>
 			</object>
 		</object>
 
 		<object name="tradeStatistics" size="20 120 100%-20 168">
-			<object                    size="0   0   130   50%" type="text" style="ModernLabelText" text_align="left" ghost="true" caption="Traders:"/>
+			<object size="0   0   130   50%" type="text" style="ModernLabelText" text_align="left" ghost="true">
+				<translatableAttribute id="caption">Traders:</translatableAttribute>
+			</object>
 			<object name="landTraders" size="130 0   100%  50%" type="text" style="ModernLabelText" text_align="left" ghost="true" />
-			<object                    size="0   50% 130  100%" type="text" style="ModernLabelText" text_align="left" ghost="true" caption = "Merchant ships:"/>
+			<object size="0   50% 130  100%" type="text" style="ModernLabelText" text_align="left" ghost="true">
+				<translatableAttribute id="caption">Merchant ships:</translatableAttribute>
+			</object>
 			<object name="shipTraders" size="130 50% 100% 100%" type="text" style="ModernLabelText" text_align="left" ghost="true" />
 		</object>
 
 		<object size="50%-64 100%-50 50%+64 100%-22" type="button" style="StoneButton">
-		    Close
+			<translatableAttribute id="caption">Close</translatableAttribute>
 		    <action on="Press">closeTrade();</action>
 		</object>
 	</object>
