@@ -38,6 +38,7 @@ function loadGame()
 
 	// check game compatibility before really loading it
 	var engineInfo = Engine.GetEngineInfo();
+	// TODO take care of the "mod" and "user" mods
 	if (!hasSameVersion(metadata, engineInfo) || !hasSameMods(metadata, engineInfo))
 	{
 		// version not compatible ... ask for confirmation
