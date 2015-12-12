@@ -1,4 +1,4 @@
-/* Copyright (C) 2012 Wildfire Games.
+/* Copyright (C) 2015 Wildfire Games.
  * This file is part of 0 A.D.
  *
  * 0 A.D. is free software: you can redistribute it and/or modify
@@ -23,10 +23,10 @@
 #define BEGIN_INTERFACE_WRAPPER(iname) \
 	JSClass class_ICmp##iname = { \
 		"ICmp" #iname, JSCLASS_HAS_PRIVATE, \
-		JS_PropertyStub, JS_DeletePropertyStub, JS_PropertyStub, JS_StrictPropertyStub, \
-		JS_EnumerateStub, JS_ResolveStub, \
-		JS_ConvertStub, NULL, \
-		NULL, NULL, NULL, NULL \
+		JS_PropertyStub, nullptr, JS_PropertyStub, JS_StrictPropertyStub, \
+		nullptr, nullptr, \
+		nullptr, nullptr, \
+		nullptr, nullptr, nullptr, nullptr \
 	}; \
 	static JSFunctionSpec methods_ICmp##iname[] = {
 
