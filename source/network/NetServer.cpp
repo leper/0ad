@@ -1150,7 +1150,7 @@ void CNetServerWorker::UpdateGameAttributes(JS::MutableHandleValue attrs)
 		return;
 
 	CGameSetupMessage gameSetupMessage(GetScriptInterface());
-	gameSetupMessage.m_Data.set(m_GameAttributes.get());
+	gameSetupMessage.m_Data = m_GameAttributes.get();
 	Broadcast(&gameSetupMessage);
 }
 
