@@ -132,7 +132,7 @@ CNetClient::~CNetClient()
 void CNetClient::TraceMember(JSTracer *trc)
 {
 	for (JS::Heap<JS::Value>& v : m_GuiMessageQueue)
-		JS_CallHeapValueTracer(trc, &v, "m_GuiMessageQueue");
+		JS_CallValueTracer(trc, &v, "m_GuiMessageQueue");
 }
 
 void CNetClient::SetUserName(const CStrW& username)
