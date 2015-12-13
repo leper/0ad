@@ -253,7 +253,8 @@ template<> void ScriptInterface::ToJSVal<Grid<u8> >(JSContext* cx, JS::MutableHa
 	u32 length = (u32)(val.m_W * val.m_H);
 	u32 nbytes = (u32)(length * sizeof(u8));
 	JS::RootedObject objArr(cx, JS_NewUint8Array(cx, length));
-	memcpy((void*)JS_GetUint8ArrayData(objArr), val.m_Data, nbytes);
+	JS::AutoCheckCannotGC nogc;
+	memcpy((void*)JS_GetUint8ArrayData(objArr, nogc), val.m_Data, nbytes);
 
 	JS::RootedValue data(cx, JS::ObjectValue(*objArr));
 	JS::RootedValue w(cx);
@@ -275,7 +276,8 @@ template<> void ScriptInterface::ToJSVal<Grid<u16> >(JSContext* cx, JS::MutableH
 	u32 length = (u32)(val.m_W * val.m_H);
 	u32 nbytes = (u32)(length * sizeof(u16));
 	JS::RootedObject objArr(cx, JS_NewUint16Array(cx, length));
-	memcpy((void*)JS_GetUint16ArrayData(objArr), val.m_Data, nbytes);
+	JS::AutoCheckCannotGC nogc;
+	memcpy((void*)JS_GetUint16ArrayData(objArr, nogc), val.m_Data, nbytes);
  
 	JS::RootedValue data(cx, JS::ObjectValue(*objArr));
 	JS::RootedValue w(cx);
