@@ -420,11 +420,11 @@ void IGUIObject::RegisterScriptHandler(const CStr& Action, const CStr& Code, CGU
 	options.setFileAndLine(CodeName.c_str(), 0);
 	options.setCompileAndGo(true);
 
-	JS::RootedFunction func(cx, JS_CompileFunction(cx, globalObj,
-		buf, paramCount, paramNames, Code.c_str(), Code.length(), options));
-
-	if (!func)
-		return; // JS will report an error message
+	JS::RootedFunction func(cx);
+	JS::AutoObjectVector emptyScopeChain(cx);
+	if (!JS::CompileFunction(cx, emptyScopeChain, options, buf, paramCount, paramNames, Code.c_str(), Code.length(), &func))
+		// TODO check if we should log something i.e. // JS will report an error message or not.
+		return;
 
 	JS::RootedObject funcObj(cx, JS_GetFunctionObject(func));
 	SetScriptHandler(Action, funcObj);
