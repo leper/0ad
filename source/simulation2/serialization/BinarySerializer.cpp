@@ -230,6 +230,7 @@ void CBinarySerializerScriptImpl::HandleScriptVal(JS::HandleValue val)
 				m_Serializer.Bool("value", b);
 				break;
 			}
+			// TODO: Ask upstream about a JS::IsMapObject (same for Set)
 			else if (protokey == JSProto_Map)
 			{
 				// TODO: There's no C++ API (yet) to work with maps. This code relies on the internal 
