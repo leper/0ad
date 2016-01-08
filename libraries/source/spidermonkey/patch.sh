@@ -6,3 +6,6 @@
 # The second patch is required to not add autoconf as a dependency.
 patch -p1 < ../FixVersionDetection.diff
 patch -p1 < ../FixVersionDetectionConfigure.diff
+
+# Fix the path to the moz.build file in the zlib module
+patch -p1 < ../FixZLibMozBuild.diff

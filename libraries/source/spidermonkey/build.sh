@@ -17,10 +17,10 @@ fi
 echo "Building SpiderMonkey..."
 echo
 
-# Workaround for Windows as suggested in bugzilla bug 948534
+# Use Mozilla make on Windows
 if [ "${OS}" = "Windows_NT" ]
 then
-  MAKE="../../../build/pymake/make.py"
+  MAKE="mozmake"
 else
   MAKE=${MAKE:="make"}
 fi
@@ -34,14 +34,14 @@ TLCXXFLAGS='-DTRACE_LOG_DIR="\"/tmp/traces/\""'
 
 # We bundle prebuilt binaries for Windows and the .libs for nspr aren't included.
 # If you want to build on Windows, check README.txt and edit the absolute paths 
-# to match your enviroment.
+# to match your environment.
 if [ "${OS}" = "Windows_NT" ]
 then
-  NSPR_INCLUDES="-IC:/Projects/nspr/nspr-4.10.7/nspr/dist/include/nspr"
+  NSPR_INCLUDES="-IC:/Projects/nspr/nspr-4.11/nspr/dist/include/nspr"
   NSPR_LIBS=" \
-  C:/Projects/nspr/nspr-4.10.7/nspr/dist/lib/nspr4.lib \
-  C:/Projects/nspr/nspr-4.10.7/nspr/dist/lib/plds4.lib \
-  C:/Projects/nspr/nspr-4.10.7/nspr/dist/lib/plc4.lib"
+  C:/Projects/nspr/nspr-4.11/nspr/dist/lib/nspr4 \
+  C:/Projects/nspr/nspr-4.11/nspr/dist/lib/plds4 \
+  C:/Projects/nspr/nspr-4.11/nspr/dist/lib/plc4"
 else
   NSPR_INCLUDES="`pkg-config nspr --cflags`"
   NSPR_LIBS="`pkg-config nspr --libs`"
@@ -129,6 +129,19 @@ else
   fi
 fi
 
+if [ "${OS}" = "Windows_NT" ]
+then
+  # Bug #776126
+  # SpiderMonkey uses a tweaked zlib when building, and it wrongly copies its own files to include dirs
+  # afterwards, so we have to remove them to not have them conflicting with the regular zlib
+  cd ${FOLDER}/js/src/build-release/dist/include
+  rm mozzconf.h zconf.h zlib.h
+  cd ../../../../../..
+  cd ${FOLDER}/js/src/build-debug/dist/include
+  rm mozzconf.h zconf.h zlib.h
+  cd ../../../../../..
+fi
+
 # Copy files into the necessary locations for building and running the game
 
 # js-config.h is different for debug and release builds, so we need different include directories for both
@@ -142,6 +155,13 @@ cp -L ${FOLDER}/js/src/build-debug/dist/lib/${LIB_PREFIX}mozjs38-ps-debug${LIB_S
 cp -L ${FOLDER}/js/src/build-release/dist/lib/${LIB_PREFIX}mozjs38-ps-release${LIB_SRC_SUFFIX} lib/${LIB_PREFIX}mozjs38-ps-release${LIB_DST_SUFFIX}
 cp -L ${FOLDER}/js/src/build-debug/dist/bin/${LIB_PREFIX}mozjs38-ps-debug${DLL_SRC_SUFFIX} ../../../binaries/system/${LIB_PREFIX}mozjs38-ps-debug${DLL_DST_SUFFIX}
 cp -L ${FOLDER}/js/src/build-release/dist/bin/${LIB_PREFIX}mozjs38-ps-release${DLL_SRC_SUFFIX} ../../../binaries/system/${LIB_PREFIX}mozjs38-ps-release${DLL_DST_SUFFIX}
+
+# On Windows, also copy debugging symbols files
+if [ "${OS}" = "Windows_NT" ]
+then
+  cp -L ${FOLDER}/js/src/build-debug/js/src/${LIB_PREFIX}mozjs38-ps-debug.pdb ../../../binaries/system/${LIB_PREFIX}mozjs38-ps-debug.pdb
+  cp -L ${FOLDER}/js/src/build-release/js/src/${LIB_PREFIX}mozjs38-ps-release.pdb ../../../binaries/system/${LIB_PREFIX}mozjs38-ps-release.pdb
+fi
 
 # Flag that it's already been built successfully so we can skip it next time
 touch .already-built

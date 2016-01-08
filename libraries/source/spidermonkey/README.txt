@@ -23,7 +23,7 @@ should be installed from the distribution's package management system.
 As an alternative you can build nspr yourself, but we don't provide a guide for
 that here. When you have nspr, just run build.sh.
 
-NSPR ist available here: 
+NSPR is available here:
 https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/
 
 
@@ -41,13 +41,13 @@ Setting up the build environment:
 1. Get https://developer.mozilla.org/en/Windows_Build_Prerequisites#MozillaBuild
 
 Building NSPR:
-1. Get nspr. We are using nspr-4.10.7 which is the newest version at the moment.
+1. Get nspr. We are using nspr-4.11 which is the newest version at the moment.
    Newer versions should probably work too. 
    Download link: https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/
 2. Run mozillabuild (start-msvc10.bat) as administrator
 3. Extract nspr to libraries/source/spidermonkey
-   tar -xzvf nspr-4.10.7.tar.gz
-   cd nspr-4.10.7
+   tar -xzvf nspr-4.11.tar.gz
+   cd nspr-4.11
    cd nspr
 4. Call configure. I've used this command:
    ./configure --disable-debug --enable-optimize --enable-win32-target=WIN95
