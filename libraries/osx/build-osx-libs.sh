@@ -45,7 +45,7 @@ ENET_VERSION="enet-1.3.13"
 MINIUPNPC_VERSION="miniupnpc-1.9.20151026"
 # --------------------------------------------------------------
 # Bundled with the game:
-# * SpiderMonkey 31
+# * SpiderMonkey 38
 # * NVTT
 # * FCollada
 # --------------------------------------------------------------
@@ -659,9 +659,9 @@ popd > /dev/null
 # be customized, so we build and install them from bundled sources
 # --------------------------------------------------------------------
 echo -e "Building Spidermonkey..."
-LIB_VERSION="mozjs-31.2.0"
+LIB_VERSION="mozjs-38.2.1"
 LIB_ARCHIVE="$LIB_VERSION.rc0.tar.bz2"
-LIB_DIRECTORY="mozjs31"
+LIB_DIRECTORY="mozjs-38.0.0"
 
 pushd ../source/spidermonkey/ > /dev/null
 
@@ -675,8 +675,6 @@ then
   rm -f lib/*.a
   rm -rf $LIB_DIRECTORY $INCLUDE_DIR_DEBUG $INCLUDE_DIR_RELEASE
   tar -xf $LIB_ARCHIVE
-  # rename the extracted directory to something shorter
-  mv $LIB_VERSION $LIB_DIRECTORY
 
   # Apply patches
   pushd $LIB_DIRECTORY
@@ -685,8 +683,7 @@ then
 
   pushd $LIB_DIRECTORY/js/src
   # We want separate debug/release versions of the library, so change their install name in the Makefile
-  perl -i.bak -pe 's/(^STATIC_LIBRARY_NAME\s+=).*/$1mozjs31-ps-debug/' Makefile.in
-  perl -i.bak -pe 's/js_static/mozjs31-ps-debug/g' shell/Makefile.in
+  perl -i.bak -pe 's/(^STATIC_LIBRARY_NAME\s+=).*/$1'\''mozjs38-ps-debug'\''/' moz.build
 
   CONF_OPTS="--target=$ARCH-apple-darwin --prefix=${INSTALL_DIR} --with-system-nspr --with-nspr-prefix=${NSPR_DIR} --with-system-zlib=${ZLIB_DIR} --enable-gcgenerational --disable-tests --disable-shared-js" # --enable-trace-logging"
   # Uncomment this line for 32-bit 10.5 cross compile:
@@ -706,11 +703,9 @@ then
   cp -R -L dist/include/* $INCLUDE_DIR_DEBUG/
   cp dist/lib/*.a $INSTALL_DIR/lib
   popd
-  mv Makefile.in.bak Makefile.in
-  mv shell/Makefile.in.bak shell/Makefile.in
+  mv moz.build.bak moz.build
 
-  perl -i.bak -pe 's/(^STATIC_LIBRARY_NAME\s+=).*/$1mozjs31-ps-release/' Makefile.in
-  perl -i.bak -pe 's/js_static/mozjs31-ps-release/g' shell/Makefile.in
+  perl -i.bak -pe 's/(^STATIC_LIBRARY_NAME\s+=).*/$1'\''mozjs38-ps-release'\''/' moz.build
   mkdir -p build-release
   pushd build-release
   (CC="clang" CXX="clang++" AR=ar CROSS_COMPILE=1 ../configure $CONF_OPTS --enable-optimize && make ${JOBS}) || die "Spidermonkey build failed"
@@ -719,8 +714,7 @@ then
   cp -R -L dist/include/* $INCLUDE_DIR_RELEASE/
   cp dist/lib/*.a $INSTALL_DIR/lib
   popd
-  mv Makefile.in.bak Makefile.in
-  mv shell/Makefile.in.bak shell/Makefile.in
+  mv moz.build.bak moz.build
   
   popd
   touch .already-built

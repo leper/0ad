@@ -63,15 +63,16 @@ CONF_OPTS="${CONF_OPTS} \
 echo "SpiderMonkey build options: ${CONF_OPTS}"
 echo ${CONF_OPTS}
 
+FOLDER=mozjs-38.0.0
+
 # Delete the existing directory to avoid conflicts and extract the tarball
-rm -rf mozjs31
-tar xjf mozjs-31.2.0.rc0.tar.bz2
-mv mozjs-31.2.0 mozjs31
+rm -rf $FOLDER
+tar xjf mozjs-38.2.1.rc0.tar.bz2
 
 # Clean up header files that may be left over by earlier versions of SpiderMonkey
 rm -rf include-unix-*
 
-cd mozjs31
+cd $FOLDER
 
 # Apply patches
 . ../patch.sh
@@ -86,14 +87,14 @@ rm -rf build-release
 # the LIBRARY_NAME for each build.
 # (We use perl instead of sed so that it works with MozillaBuild on Windows,
 # which has an ancient sed.)
-perl -i.bak -pe 's/(LIBRARY_NAME\s+=).*/$1 '\''mozjs31-ps-debug'\''/' moz.build
+perl -i.bak -pe 's/(SHARED_LIBRARY_NAME\s+=).*/$1 '\''mozjs38-ps-debug'\''/' moz.build
 mkdir -p build-debug
 cd build-debug
 CXXFLAGS="${TLCXXFLAGS}" ../configure ${CONF_OPTS} --with-nspr-libs="$NSPR_LIBS" --with-nspr-cflags="$NSPR_INCLUDES" --enable-debug --disable-optimize --enable-js-diagnostics --enable-gczeal # --enable-root-analysis
 ${MAKE} ${MAKE_OPTS}
 cd ..
 
-perl -i.bak -pe 's/(LIBRARY_NAME\s+=).*/$1 '\''mozjs31-ps-release'\''/' moz.build
+perl -i.bak -pe 's/(SHARED_LIBRARY_NAME\s+=).*/$1 '\''mozjs38-ps-release'\''/' moz.build
 mkdir -p build-release
 cd build-release
 CXXFLAGS="${TLCXXFLAGS}" ../configure ${CONF_OPTS} --with-nspr-libs="$NSPR_LIBS" --with-nspr-cflags="$NSPR_INCLUDES" --enable-optimize  # --enable-gczeal --enable-debug-symbols
@@ -133,14 +134,14 @@ fi
 # js-config.h is different for debug and release builds, so we need different include directories for both
 mkdir -p ${INCLUDE_DIR_DEBUG}
 mkdir -p ${INCLUDE_DIR_RELEASE}
-cp -R -L mozjs31/js/src/build-release/dist/include/* ${INCLUDE_DIR_RELEASE}/
-cp -R -L mozjs31/js/src/build-debug/dist/include/* ${INCLUDE_DIR_DEBUG}/
+cp -R -L ${FOLDER}/js/src/build-release/dist/include/* ${INCLUDE_DIR_RELEASE}/
+cp -R -L ${FOLDER}/js/src/build-debug/dist/include/* ${INCLUDE_DIR_DEBUG}/
 
 mkdir -p lib/
-cp -L mozjs31/js/src/build-debug/dist/lib/${LIB_PREFIX}mozjs31-ps-debug${LIB_SRC_SUFFIX} lib/${LIB_PREFIX}mozjs31-ps-debug${LIB_DST_SUFFIX}
-cp -L mozjs31/js/src/build-release/dist/lib/${LIB_PREFIX}mozjs31-ps-release${LIB_SRC_SUFFIX} lib/${LIB_PREFIX}mozjs31-ps-release${LIB_DST_SUFFIX}
-cp -L mozjs31/js/src/build-debug/dist/bin/${LIB_PREFIX}mozjs31-ps-debug${DLL_SRC_SUFFIX} ../../../binaries/system/${LIB_PREFIX}mozjs31-ps-debug${DLL_DST_SUFFIX}
-cp -L mozjs31/js/src/build-release/dist/bin/${LIB_PREFIX}mozjs31-ps-release${DLL_SRC_SUFFIX} ../../../binaries/system/${LIB_PREFIX}mozjs31-ps-release${DLL_DST_SUFFIX}
+cp -L ${FOLDER}/js/src/build-debug/dist/lib/${LIB_PREFIX}mozjs38-ps-debug${LIB_SRC_SUFFIX} lib/${LIB_PREFIX}mozjs38-ps-debug${LIB_DST_SUFFIX}
+cp -L ${FOLDER}/js/src/build-release/dist/lib/${LIB_PREFIX}mozjs38-ps-release${LIB_SRC_SUFFIX} lib/${LIB_PREFIX}mozjs38-ps-release${LIB_DST_SUFFIX}
+cp -L ${FOLDER}/js/src/build-debug/dist/bin/${LIB_PREFIX}mozjs38-ps-debug${DLL_SRC_SUFFIX} ../../../binaries/system/${LIB_PREFIX}mozjs38-ps-debug${DLL_DST_SUFFIX}
+cp -L ${FOLDER}/js/src/build-release/dist/bin/${LIB_PREFIX}mozjs38-ps-release${DLL_SRC_SUFFIX} ../../../binaries/system/${LIB_PREFIX}mozjs38-ps-release${DLL_DST_SUFFIX}
 
 # Flag that it's already been built successfully so we can skip it next time
 touch .already-built
