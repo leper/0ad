@@ -350,11 +350,9 @@ ScriptInterface_impl::ScriptInterface_impl(const char* nativeScopeName, const sh
 	JS::RootedValue ret(m_cx);
 	JS_CallFunctionName(m_cx, testingFunctionsObj, "gcPreserveCode", JS::HandleValueArray::empty(), &ret);
 
-	JS_DefineProperty(m_cx, m_glob, "global", globalRootedVal, JSPROP_ENUMERATE | JSPROP_READONLY
-			| JSPROP_PERMANENT);
+	JS_DefineProperty(m_cx, m_glob, "global", globalRootedVal, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
 
-	m_nativeScope = JS_DefineObject(m_cx, m_glob, nativeScopeName, NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY
-			| JSPROP_PERMANENT);
+	m_nativeScope = JS_DefineObject(m_cx, m_glob, nativeScopeName, NULL, NULL, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
 
 	JS_DefineFunction(m_cx, globalRootedVal, "print", ::print,        0, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
 	JS_DefineFunction(m_cx, globalRootedVal, "log",   ::logmsg,       1, JSPROP_ENUMERATE | JSPROP_READONLY | JSPROP_PERMANENT);
@@ -624,7 +622,7 @@ bool ScriptInterface::SetProperty_(JS::HandleValue obj, const char* name, JS::Ha
 		return false;
 	JS::RootedObject object(m->m_cx, &obj.toObject());
 
-	if (! JS_DefineProperty(m->m_cx, object, name, value, attrs))
+	if (!JS_DefineProperty(m->m_cx, object, name, value, attrs))
 		return false;
 	return true;
 }
@@ -661,7 +659,7 @@ bool ScriptInterface::SetPropertyInt_(JS::HandleValue obj, int name, JS::HandleV
 		return false;
 	JS::RootedObject object(m->m_cx, &obj.toObject());
 
-	if (! JS_DefinePropertyById(m->m_cx, object, INT_TO_JSID(name), value, NULL, NULL, attrs))
+	if (!JS_DefinePropertyById(m->m_cx, object, INT_TO_JSID(name), value, NULL, NULL, attrs))
 		return false;
 	return true;
 }
@@ -742,7 +740,7 @@ bool ScriptInterface::EnumeratePropertyNamesWithPrefix(JS::HandleValue objVal, c
 		return false;
 	}
 		
-	if(objVal.isNull())
+	if (objVal.isNull())
 		return true; // reached the end of the prototype chain
 	
 	JS::RootedObject obj(m->m_cx, &objVal.toObject());
@@ -766,7 +764,7 @@ bool ScriptInterface::EnumeratePropertyNamesWithPrefix(JS::HandleValue objVal, c
 		size_t prefixLen = strlen(prefix) * sizeof(char);
 		JS_EncodeStringToBuffer(m->m_cx, name, &buf[0], prefixLen);
 		buf[len-1]= '\0';
-		if(0 == strcmp(&buf[0], prefix))
+		if (0 == strcmp(&buf[0], prefix))
 		{
 			size_t len;
 			const char16_t* chars = JS_GetStringCharsAndLength(m->m_cx, name, &len);
@@ -779,7 +777,7 @@ bool ScriptInterface::EnumeratePropertyNamesWithPrefix(JS::HandleValue objVal, c
 	if (JS_GetPrototype(m->m_cx, obj, &prototype))
 	{
 		JS::RootedValue prototypeVal(m->m_cx, JS::ObjectOrNullValue(prototype));
-		if (! EnumeratePropertyNamesWithPrefix(prototypeVal, prefix, out))
+		if (!EnumeratePropertyNamesWithPrefix(prototypeVal, prefix, out))
 			return false;
 	}
 
