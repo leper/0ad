@@ -24,6 +24,7 @@
 #include "LightEnv.h"
 #include "ps/FileIo.h"
 #include "scriptinterface/ScriptInterface.h"
+#include "scriptinterface/ScriptVal.h"
 #include "simulation2/system/Entity.h"
 
 class CObjectEntry;

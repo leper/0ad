@@ -49,6 +49,7 @@ The base class of an object
 #include "gui/scripting/JSInterface_IGUIObject.h"
 #include "lib/input.h" // just for IN_PASS
 #include "ps/XML/Xeromyces.h"
+#include "scriptinterface/ScriptVal.h"
 
 #include <string>
 #include <vector>

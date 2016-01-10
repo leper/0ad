@@ -24,7 +24,6 @@
 
 #include "maths/Fixed.h"
 #include "ScriptTypes.h"
-#include "ScriptVal.h"
 #include "ps/Errors.h"
 #include "ps/Profile.h"
 
@@ -421,7 +420,7 @@ private:
 			m_Constructor = std::move(other.m_Constructor);
 		}
 
-		DefPersistentRooted<JSObject*>	m_Prototype;
+		JS::PersistentRooted<JSObject*> m_Prototype;
 		JSClass* m_Class;
 		JSNative m_Constructor;
 	};
