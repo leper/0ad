@@ -1,4 +1,4 @@
-/* Copyright (C) 2015 Wildfire Games.
+/* Copyright (C) 2016 Wildfire Games.
  * This file is part of 0 A.D.
  *
  * 0 A.D. is free software: you can redistribute it and/or modify
@@ -131,9 +131,8 @@ CNetClient::~CNetClient()
 
 void CNetClient::TraceMember(JSTracer *trc)
 {
-	std::deque<JS::Heap<JS::Value> >::iterator itr;
-	for (itr=m_GuiMessageQueue.begin(); itr != m_GuiMessageQueue.end(); ++itr)
-		JS_CallHeapValueTracer(trc, &*itr, "m_GuiMessageQueue");
+	for (JS::Heap<JS::Value>& v : m_GuiMessageQueue)
+		JS_CallHeapValueTracer(trc, &v, "m_GuiMessageQueue");
 }
 
 void CNetClient::SetUserName(const CStrW& username)
